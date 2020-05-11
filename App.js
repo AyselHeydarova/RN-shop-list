@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
 import { AppLoading } from "expo";
 import { loadFonts } from "./styles/fonts";
-import HomePage from "./Screens/HomePage";
-import Drawer from "./navigation/Drawer";
+import { Drawer } from "./navigation/Drawer";
+import { Provider } from "react-redux";
+import { AsyncStorage } from "react-native";
+import store from "./Store/store";
+import { SingleListEdit } from "./Components/SingleListEdit";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -18,5 +20,9 @@ export default function App() {
     );
   }
 
-  return <Drawer />;
+  return (
+    <Provider store={store}>
+     <Drawer/>
+    </Provider>
+  );
 }

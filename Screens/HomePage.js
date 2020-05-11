@@ -1,21 +1,34 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View, TextInput, AsyncStorage } from "react-native";
 import { COLORS } from "../styles/colors";
+import { DefText } from "../Commons/DefText";
+import { ListView } from "../Components/ListView";
 
-const HomePage = () => {
+import { connect } from "react-redux";
+
+const mapStateToProps = (state) => ({
+  OneTimeLists: state.lists.OneTimeLists,
+});
+
+const HomePage = connect(mapStateToProps)((props) => {
+  console.log(props.OneTimeLists);
+
   return (
     <View style={styles.container}>
-      <Text>I am A HomePage!!!</Text>
+      <View>
+        {props.OneTimeLists.map((list) => (
+          <ListView listName={list.name} key={list.id} listItemsLength={list.listItems.length} navigation={props.navigation}/>
+        ))}
+      </View>
+       
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.yellow,
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 16,
   },
 });
 
