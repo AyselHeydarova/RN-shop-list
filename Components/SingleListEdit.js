@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
@@ -10,15 +9,32 @@ import {
 import { COLORS } from "../styles/colors";
 import { DefText } from "../Commons/DefText";
 import { CustomBtn } from "../Commons/CustomBtn";
-import {ListItem} from '../Components/ListItem'
+import { ListItem } from "../Components/ListItem";
+import { connect } from "react-redux";
+import { addListItem } from "../Store/lists";
 
-export const SingleListEdit = () => {
+const mapStateToProps = (state) => {
+  OneTimeLists: state.lists.OneTimeLists;
+};
+
+export const SingleListEdit = connect(mapStateToProps, { addListItem })(() => {
+  const [fields, setFields] = useState({
+    name: "",
+    count: 0,
+    unit: "kg",
+  });
+
+  const handleFieldChange = (name, value) => {};
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.center}>
           <DefText weight="medium">position name</DefText>
-          <TextInput style={styles.input} />
+          <TextInput
+            style={styles.input}
+            onChangeText={(v) => setFields.name()}
+          />
         </View>
 
         <View style={styles.center}>
@@ -53,10 +69,10 @@ export const SingleListEdit = () => {
       <CustomBtn title="Add to list" style={{ width: 400 }} />
       <View style={styles.line} />
 
-      <ListItem/>
+      <ListItem />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -96,8 +112,8 @@ const styles = StyleSheet.create({
 
   line: {
     height: 2,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get("window").width,
     backgroundColor: COLORS.gray,
-    marginVertical: 20
+    marginVertical: 20,
   },
 });
