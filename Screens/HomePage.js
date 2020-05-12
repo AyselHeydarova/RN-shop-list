@@ -16,11 +16,21 @@ const HomePage = connect(mapStateToProps)((props) => {
   return (
     <View style={styles.container}>
       <View>
-        {props.OneTimeLists.map((list) => (
-          <ListView listName={list.name} key={list.id} listItemsLength={list.listItems.length} navigation={props.navigation}/>
+        {props.OneTimeLists.map((list, id ) => (
+          <ListView
+            listId={id}
+            listName={list.name}
+            key={list.id}
+            listItemsLength={list.listItems.length}
+            onPress={() =>
+              props.navigation.navigate("singleEdit", {
+                listName: list.name,
+                listId: id,
+              })
+            }
+          />
         ))}
       </View>
-       
     </View>
   );
 });

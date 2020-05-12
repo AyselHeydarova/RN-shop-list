@@ -31,7 +31,7 @@ const HomeStack = () => {
         name="singleEdit"
         component={SingleListEdit}
         options={{
-          title: "Single List Edit",
+          title: "Single Edit",
           headerStyle: {
             backgroundColor: COLORS.red,
           },

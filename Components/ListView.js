@@ -1,15 +1,14 @@
 import React from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import { View, StyleSheet, Dimensions,TouchableOpacity } from "react-native";
 import { DefText } from "../Commons/DefText";
 import { COLORS } from "../styles/colors";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
-export const ListView = ({ listName, listItemsLength, navigation }) => {
+export const ListView = ({ listName, listItemsLength, onPress, listId }) => {
+
+  comsole.log("listId" + listId)
+
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => navigation.navigate("singleEdit")}
-    >
+    <TouchableOpacity style={styles.container} id={listId} onPress={onPress}>
       <DefText weight="medium" style={styles.text}>
         {listName}
       </DefText>

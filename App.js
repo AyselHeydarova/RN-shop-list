@@ -5,7 +5,7 @@ import { Drawer } from "./navigation/Drawer";
 import { Provider } from "react-redux";
 import { AsyncStorage } from "react-native";
 import store from "./Store/store";
-import { SingleListEdit } from "./Components/SingleListEdit";
+import SingleListEdit  from "./Components/SingleListEdit";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);

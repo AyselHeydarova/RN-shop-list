@@ -10,69 +10,95 @@ import { COLORS } from "../styles/colors";
 import { DefText } from "../Commons/DefText";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { ListItem } from "../Components/ListItem";
-import { connect } from "react-redux";
+
 import { addListItem } from "../Store/lists";
+import { connect } from "react-redux";
 
-const mapStateToProps = (state) => {
-  OneTimeLists: state.lists.OneTimeLists;
-};
+const mapStateToProps = (state) => ({
+  OneTimeLists: state.lists.OneTimeLists,
+});
+ const SingleListEdit = connect(mapStateToProps, {addListItem})(
+  (props) => {
+    console.log("props.OneTimeLists" + props.OneTimeLists);
+    console.log("props" + props);
+    const [fields, setFields] = useState({
+      listId: props.route?.params?.listId,
+      name: "",
+      count: 0,
+      unit: "kg",
+    });
 
-export const SingleListEdit = connect(mapStateToProps, { addListItem })(() => {
-  const [fields, setFields] = useState({
-    name: "",
-    count: 0,
-    unit: "kg",
-  });
+    const indexOfList = props.OneTimeLists.findIndex(
+      (list) => list.id === fields.listId
+    );
 
-  const handleFieldChange = (name, value) => {};
+    const handleFieldChange = (name, value) => {
+      setFields((fields) => ({
+        ...fields,
+        [name]: value,
+      }));
+    };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <View style={styles.center}>
-          <DefText weight="medium">position name</DefText>
-          <TextInput
-            style={styles.input}
-            onChangeText={(v) => setFields.name()}
-          />
-        </View>
+    const createListItem = (fields) => {
+      props.addListItem(fields);
+    };
 
-        <View style={styles.center}>
-          <DefText weight="medium">count</DefText>
-          <View style={styles.count}>
-            <TouchableOpacity>
-              <DefText weight="bold">-</DefText>
-            </TouchableOpacity>
-            <DefText weight="bold">2</DefText>
+    return (
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <View style={styles.center}>
+            <DefText weight="medium">position name</DefText>
+            <TextInput
+              style={styles.input}
+              onChangeText={(v) => handleFieldChange(name, v)}
+            />
+          </View>
 
-            <TouchableOpacity>
-              <DefText weight="bold">+</DefText>
-            </TouchableOpacity>
+          <View style={styles.center}>
+            <DefText weight="medium">count</DefText>
+            <View style={styles.count}>
+              <TouchableOpacity>
+                <DefText weight="bold">-</DefText>
+              </TouchableOpacity>
+              <DefText weight="bold">2</DefText>
+
+              <TouchableOpacity>
+                <DefText weight="bold">+</DefText>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
 
-      <View style={styles.row}>
-        <TouchableOpacity style={styles.count}>
-          <DefText>pkg</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.count}>
-          <DefText>kg</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.count}>
-          <DefText>litre</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.count}>
-          <DefText>bott</DefText>
-        </TouchableOpacity>
-      </View>
-      <CustomBtn title="Add to list" style={{ width: 400 }} />
-      <View style={styles.line} />
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.count}>
+            <DefText>pkg</DefText>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.count}>
+            <DefText>kg</DefText>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.count}>
+            <DefText>litre</DefText>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.count}>
+            <DefText>bott</DefText>
+          </TouchableOpacity>
+        </View>
+        <CustomBtn
+          title="Add to list"
+          style={{ width: 400 }}
+          onPress={createListItem}
+        />
+        <View style={styles.line} />
 
-      <ListItem />
-    </View>
-  );
-});
+        {/* <View>
+          {props.OneTimeLists[indexOfList].listItems.map((listItem) => (
+            <ListItem listItemName={listItem.name} />
+          ))}
+        </View> */}
+      </View>
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -117,3 +143,5 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 });
+
+export default SingleListEdit;

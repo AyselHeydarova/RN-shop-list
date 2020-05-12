@@ -11,14 +11,14 @@ import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
 import { COLORS } from "../styles/colors";
 
-export const ListItem = () => {
+export const ListItem = ({ listItemName }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity>
         <Image source={EditIcon} style={styles.icon} />
       </TouchableOpacity>
       <View style={styles.textArea}>
-        <DefText>Pasta</DefText>
+        <DefText>{listItemName}</DefText>
       </View>
 
       <TouchableOpacity>

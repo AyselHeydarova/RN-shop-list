@@ -5,7 +5,7 @@ export const INCREMENT = "INCREMENT";
 export const DECREMENT = "DECREMENT";
 export const CHANGE_USERNAME = "CHANGE_USERNAME";
 export const CHANGE_URL = "CHANGE_URL";
-export const ADD_LIST_ITEM = 'ADD_LIST_ITEM'
+export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
 
 // Action Creators
 
@@ -119,22 +119,30 @@ export function listReducer(state = initialState, action) {
           },
         ],
       };
-    } case ADD_LIST_ITEM: {
-      const updatedState = {...state};
-      updatedState.OneTimeLists = {...updatedState.OneTimeLists};
-      const listIndex = updatedState.OneTimeLists.findIndex(list => list.id === payload.id);
+    }
+    case ADD_LIST_ITEM: {
+      const updatedState = { ...state };
+      updatedState.OneTimeLists = [...updatedState.OneTimeLists];
+      const listIndex = updatedState.OneTimeLists.findIndex(
+        (list) => list.id === action.payload.listId
+      );
 
-      const indexIsFound = listIndex > -1
-      if(indexIsFound) {
-        updatedState.OneTimeLists[listIndex] = { ...updatedState.OneTimeList[listIndex], listItems: [...updatedState.OneTimeList[listIndex].listItems,  {
-          id: `${Math.random()}${Date.now()}`,
-            name: action.payload.name,
-            count: action.payload.count,
-            unit: action.payload.unit
-        }] }
-        
+      const indexIsFound = listIndex > -1;
+      if (indexIsFound) {
+        updatedState.OneTimeLists[listIndex] = {
+          ...updatedState.OneTimeList[listIndex],
+          listItems: [
+            ...updatedState.OneTimeList[listIndex].listItems,
+            {
+              id: `${Math.random()}${Date.now()}`,
+              name: action.payload.name,
+              count: action.payload.count,
+              unit: action.payload.unit,
+            },
+          ],
+        };
       }
-    
+
       return indexIsFound ? updatedState : state;
     }
 
