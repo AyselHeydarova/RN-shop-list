@@ -10,7 +10,7 @@ import { DefText } from "../Commons/DefText";
 export const CustomBtn = ({ title, onPress, style }) => {
   return (
     <View>
-      <TouchableOpacity style={{...styles.wrapper, style}} onPress={onPress}> 
+      <TouchableOpacity style = {{...styles.wrapper, ...style}} onPress={onPress}> 
         <DefText style={styles.text} weight="bold">
           {title}
         </DefText>

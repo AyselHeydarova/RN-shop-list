@@ -25,7 +25,7 @@ export const ListItem = ({ listItemName, unitName, count, editHandler, deleteHan
 
       </View>
 
-      <TouchableOpacity onPress={deleteHandler}>
+      <TouchableOpacity onPress = { deleteHandler }>
         <Image source={DeleteIcon} style={styles.icon} />
       </TouchableOpacity>
     </View>

@@ -4,6 +4,8 @@ export const CREATE_REGULAR_LIST = "CREATE_REGULAR_LIST";
 export const CHANGE_USERNAME = "CHANGE_USERNAME";
 export const CHANGE_URL = "CHANGE_URL";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
+export const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
+export const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
 
 // Action Creators
 
@@ -29,6 +31,16 @@ export const changeUrl = (payload) => ({
 
 export const addListItem = (payload) => ({
   type: ADD_LIST_ITEM,
+  payload,
+});
+
+export const deleteListItem = (payload) => ({
+  type: DELETE_LIST_ITEM,
+  payload,
+});
+
+export const updateListItem = (payload) => ({
+  type: UPDATE_LIST_ITEM,
   payload,
 });
 
@@ -134,12 +146,71 @@ export function listReducer(state = initialState, action) {
 
       return indexIsFound ? updatedState : state;
     }
+    case DELETE_LIST_ITEM: {
+      const updatedState = { ...state };
+      updatedState.OneTimeLists = [...updatedState.OneTimeLists];
+      updatedState.RegularLists = [...updatedState.RegularLists];
+      const listIndex = updatedState.OneTimeLists.findIndex(
+        (list) => list.id === action.payload.listId
+      );
+
+      const indexIsFound = listIndex > -1;
+
+      if (indexIsFound) {
+        updatedState.OneTimeLists[listIndex] = {
+          ...updatedState.OneTimeLists[listIndex],
+          listItems: [
+            ...updatedState.OneTimeLists[listIndex].listItems.filter(
+              (listItem) => listItem.id !== action.payload.listItemId
+            ),
+          ],
+        };
+      }
+
+      return indexIsFound ? updatedState : state;
+    } 
+    case UPDATE_LIST_ITEM: {
+      const updatedState = { ...state };
+      updatedState.OneTimeLists = [...updatedState.OneTimeLists];
+      updatedState.RegularLists = [...updatedState.RegularLists];
+      const listIndex = updatedState.OneTimeLists.findIndex(
+        (list) => list.id === action.payload.listId
+      );
+
+      const indexIsFound = listIndex > -1;
+
+      const listItemIndex = updatedState.OneTimeLists[listIndex].listItems.findIndex(
+        (listItem) => listItem.id === action.payload.listItemId
+      )
+      
+      if (indexIsFound) {
+        updatedState.OneTimeLists[listIndex] = {
+          ...updatedState.OneTimeLists[listIndex],
+          listItems: [
+            
+            ...updatedState.OneTimeLists[listIndex].listItems.filter(
+              (listItem) => listItem.id !== action.payload.listItemId
+            ),
+
+            updatedState.OneTimeLists[listIndex].listItems[listItemIndex] = {
+              
+                id: `${Math.random()}${Date.now()}`,
+                name: action.payload.name,
+                count: action.payload.count,
+                unit: action.payload.unit,
+              
+            }      
+          ],
+        };
+      }
+
+      return indexIsFound ? updatedState : state;
+    }
 
     default:
       return state;
   }
 }
-
 
 const firstState = {
   username: "John Smith",

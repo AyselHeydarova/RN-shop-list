@@ -5,8 +5,6 @@ import { COLORS } from "../styles/colors";
 
 export const ListView = ({ listName, listItemsLength, onPress, listId }) => {
 
-
-  console.log('listId', listId)
   return (
     <TouchableOpacity style={styles.container} id={listId} onPress={()=> onPress(listId)}>
       <DefText weight="medium" style={styles.text}>

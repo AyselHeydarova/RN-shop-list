@@ -11,24 +11,35 @@ import { DefText } from "../Commons/DefText";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { ListItem } from "../Components/ListItem";
 
-import { addListItem } from "../Store/lists";
+import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
   OneTimeLists: state.lists.OneTimeLists,
 });
-const SingleListEdit = connect(mapStateToProps, { addListItem })((props) => {
-
+const SingleListEdit = connect(mapStateToProps, {
+  addListItem,
+  deleteListItem,
+  updateListItem
+})((props) => {
   const [fields, setFields] = useState({
     listId: props.route?.params?.listId,
+    listItemId: "",
     name: "",
     count: 0,
     unit: "kg",
   });
 
-  const[itemEditMode, setItemEditMode] = useState (false)
-  
+  console.log('listItemId', fields.listItemId)
 
+  const [itemEditMode, setItemEditMode] = useState(false);
+
+  const units = [
+     "pkg",
+     "kg", 
+    "litre",
+    "bott",
+  ];
 
   const indexOfList = props.OneTimeLists.findIndex(
     (list) => list.id === fields.listId
@@ -41,9 +52,23 @@ const SingleListEdit = connect(mapStateToProps, { addListItem })((props) => {
     }));
   };
 
-  const handleEdit = () => {
-setItemEditMode(true);
+  const allListItems = props.OneTimeLists[indexOfList].listItems;
+
+  const handleEdit = (idvalue) => {
+    const indexOfListItem = allListItems.findIndex(
+      (listItem) => listItem.id === idvalue
+    );
+    setItemEditMode(true);
+    setFields((fields) => ({
+      ...fields,
+      ...allListItems[indexOfListItem],
+      listItemId: idvalue,
+    }));
   };
+
+  const updateItem = () => {
+    props.updateListItem(fields)
+  }
 
   const increment = () => {
     setFields((fields) => ({
@@ -70,6 +95,10 @@ setItemEditMode(true);
     props.addListItem(fields);
   };
 
+  const handleDelete = (listItemId) => {
+    props.deleteListItem({ listId: fields.listId, listItemId });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -77,6 +106,7 @@ setItemEditMode(true);
           <DefText weight="medium">position name</DefText>
           <TextInput
             style={styles.input}
+            value={fields.name}
             onChangeText={(v) => handleFieldChange("name", v)}
           />
         </View>
@@ -97,59 +127,44 @@ setItemEditMode(true);
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.count}
-          onPress={() => unitHandler("pkg")}
-        >
-          <DefText>pkg</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.count}
-          onPress={() => unitHandler("kg")}
-        >
-          <DefText>kg</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.count}
-          onPress={() => unitHandler("litre")}
-        >
-          <DefText>litre</DefText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.count}
-          onPress={() => unitHandler("bott")}
-        >
-          <DefText>bott</DefText>
-        </TouchableOpacity>
+        {units.map((unit) => (
+          <TouchableOpacity
+            style={styles.count}
+            onPress={() => {unitHandler(unit)}}
+          >
+            <DefText>{unit}</DefText>
+          </TouchableOpacity>
+        ))}
       </View>
-         
-            {
-            itemEditMode ? 
-            <View><CustomBtn title="cancel"/><CustomBtn title="update"/></View>
-              : 
-         <CustomBtn
-            title="Add to list"
-            style={{ width: 400 }}
-            onPress={createListItem}
-            />  } 
 
+      {itemEditMode ? (
+        <View style ={styles.row}>
+          <CustomBtn title="cancel" style={{width: 150}} onPress= {()=> setItemEditMode(false)} />
+          <CustomBtn title="update" style={{width: 150}} onPress={updateItem}/>
+        </View>
+      ) : (
+        <CustomBtn
+          title="Add to list"
+          style={{ width: 400 }}
+          onPress={createListItem}
+        />
+      )}
 
       <View style={styles.line} />
 
-          <View>
-            {props.OneTimeLists[indexOfList].listItems.map((listItem) => (
-              <ListItem
-                listItemName={listItem.name}
-                unitName={listItem.unit}
-                count={listItem.count}
-                editHandler={handleEdit}
-                // deleteHandler={}
-              />
-            ))}
-          </View>
- 
+      <View>
+        {props.OneTimeLists[indexOfList].listItems.map((listItem) => (
+          <ListItem
+            listItemName={listItem.name}
+            listItemId={listItem.id}
+            unitName={listItem.unit}
+            count={listItem.count}
+            editHandler={() => handleEdit(listItem.id)}
+            deleteHandler={() => handleDelete(listItem.id)}
+          />
+        ))}
+      </View>
     </View>
-
   );
 });
 
