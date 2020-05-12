@@ -145,7 +145,7 @@ const SingleListEdit = connect(mapStateToProps, {
       ) : (
         <CustomBtn
           title="Add to list"
-          style={{ width: 400 }}
+          style={{ width: 340 }}
           onPress={createListItem}
         />
       )}

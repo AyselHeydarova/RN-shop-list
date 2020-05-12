@@ -6,6 +6,8 @@ import { COLORS } from "../styles/colors";
 import { UserSettings } from "../Components/UserSettings";
 import RegularLists from "../Components/RegularLists";
 import SingleListEdit from "../Components/SingleListEdit";
+import { Image } from "react-native";
+import SaveIcon from '../assets/Save.png'
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -37,8 +39,10 @@ const HomeStack = () => {
           },
           headerTitleStyle: {
             color: "white",
+            fontSize: 18,
             fontFamily: "MontserratRegular",
           },
+          headerRight: () => <Image source={SaveIcon} style={{width: 22, height: 22, marginRight:16}}/>
         })}
       />
 

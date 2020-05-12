@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, Text, AsyncStorage } from "react-native";
+import { View, StyleSheet, TextInput, Text, AsyncStorage, Image } from "react-native";
 import { COLORS } from "../styles/colors";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { DefText } from "../Commons/DefText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createOneTimeList, createRegularList } from "../Store/lists";
 import { connect } from "react-redux";
+
 
 const mapStateToProps = (state) => ({
   OneTimeLists: state.lists.OneTimeLists,
@@ -32,7 +33,9 @@ const CreateList = connect(mapStateToProps, {
   const createList = isOneTimeList ? createOneTimeList : createRegularList;
 
   return (
+
     <View style={styles.container}>
+      
       <DefText weight="medium">list name</DefText>
       <DefText weight="medium">{name}</DefText>
       <TextInput
@@ -68,6 +71,8 @@ const CreateList = connect(mapStateToProps, {
       </View>
 
       <CustomBtn title="Create List" onPress={createList} />
+
+     
     </View>
   );
 });
@@ -76,6 +81,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     marginTop: 20,
+
   },
 
   input: {
