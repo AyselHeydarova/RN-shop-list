@@ -5,7 +5,7 @@ import CreateList from "../Components/CreateList";
 import { COLORS } from "../styles/colors";
 import { UserSettings } from "../Components/UserSettings";
 import RegularLists from "../Components/RegularLists";
-import { SingleListEdit } from "../Components/SingleListEdit";
+import SingleListEdit from "../Components/SingleListEdit";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -30,8 +30,8 @@ const HomeStack = () => {
       <Screen
         name="singleEdit"
         component={SingleListEdit}
-        options={{
-          title: "Single Edit",
+        options={({ route }) => ({
+          title: route.params.listName,
           headerStyle: {
             backgroundColor: COLORS.red,
           },
@@ -39,7 +39,7 @@ const HomeStack = () => {
             color: "white",
             fontFamily: "MontserratRegular",
           },
-        }}
+        })}
       />
 
       <Screen

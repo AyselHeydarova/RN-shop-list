@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { StyleSheet, View, TextInput, AsyncStorage } from "react-native";
-import { COLORS } from "../styles/colors";
-import { DefText } from "../Commons/DefText";
 import { ListView } from "../Components/ListView";
 
 import { connect } from "react-redux";
@@ -16,16 +14,16 @@ const HomePage = connect(mapStateToProps)((props) => {
   return (
     <View style={styles.container}>
       <View>
-        {props.OneTimeLists.map((list, id ) => (
+        {props.OneTimeLists.map((list) => (
           <ListView
-            listId={id}
+            listId={list.id}
             listName={list.name}
             key={list.id}
             listItemsLength={list.listItems.length}
-            onPress={() =>
+            onPress={(listId) =>
               props.navigation.navigate("singleEdit", {
                 listName: list.name,
-                listId: id,
+                listId: listId,
               })
             }
           />

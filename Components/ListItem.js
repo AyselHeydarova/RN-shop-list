@@ -11,17 +11,21 @@ import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
 import { COLORS } from "../styles/colors";
 
-export const ListItem = ({ listItemName }) => {
+export const ListItem = ({ listItemName, unitName, count, editHandler, deleteHandler }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={editHandler}>
         <Image source={EditIcon} style={styles.icon} />
       </TouchableOpacity>
       <View style={styles.textArea}>
         <DefText>{listItemName}</DefText>
+        <DefText>{count}</DefText>
+        <DefText>{unitName}</DefText>
+        
+
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={deleteHandler}>
         <Image source={DeleteIcon} style={styles.icon} />
       </TouchableOpacity>
     </View>
@@ -45,7 +49,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 120,
     paddingHorizontal: 10,
     display: "flex",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    justifyContent: "space-between",
     alignItems: "flex-start",
   },
 

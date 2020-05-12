@@ -1,8 +1,6 @@
 // Actions
 export const CREATE_ONE_TIME_LIST = "CREATE_ONE_TIME_LIST";
 export const CREATE_REGULAR_LIST = "CREATE_REGULAR_LIST";
-export const INCREMENT = "INCREMENT";
-export const DECREMENT = "DECREMENT";
 export const CHANGE_USERNAME = "CHANGE_USERNAME";
 export const CHANGE_URL = "CHANGE_URL";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
@@ -26,16 +24,6 @@ export const changeUsername = (payload) => ({
 
 export const changeUrl = (payload) => ({
   type: CHANGE_URL,
-  payload,
-});
-
-export const increment = (payload) => ({
-  type: INCREMENT,
-  payload,
-});
-
-export const decrement = (payload) => ({
-  type: DECREMENT,
   payload,
 });
 
@@ -123,6 +111,7 @@ export function listReducer(state = initialState, action) {
     case ADD_LIST_ITEM: {
       const updatedState = { ...state };
       updatedState.OneTimeLists = [...updatedState.OneTimeLists];
+      updatedState.RegularLists = [...updatedState.RegularLists];
       const listIndex = updatedState.OneTimeLists.findIndex(
         (list) => list.id === action.payload.listId
       );
@@ -130,9 +119,9 @@ export function listReducer(state = initialState, action) {
       const indexIsFound = listIndex > -1;
       if (indexIsFound) {
         updatedState.OneTimeLists[listIndex] = {
-          ...updatedState.OneTimeList[listIndex],
+          ...updatedState.OneTimeLists[listIndex],
           listItems: [
-            ...updatedState.OneTimeList[listIndex].listItems,
+            ...updatedState.OneTimeLists[listIndex].listItems,
             {
               id: `${Math.random()}${Date.now()}`,
               name: action.payload.name,
@@ -151,23 +140,6 @@ export function listReducer(state = initialState, action) {
   }
 }
 
-export function countReducer(state, action) {
-  switch (action.type) {
-    case INCREMENT: {
-      if (state.OneTimeLists.listItems.id === action.payload.id) {
-        return {
-          ...state,
-          OneTimeLists: [
-            ...state.OneTimeLists,
-            { listItems: [...state.OneTimeLists.listItems] },
-          ],
-        };
-      }
-    }
-    default:
-      return state;
-  }
-}
 
 const firstState = {
   username: "John Smith",
