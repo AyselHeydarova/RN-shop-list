@@ -11,41 +11,43 @@ import { DefText } from "../Commons/DefText";
 import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
 import { COLORS } from "../styles/colors";
+import {toggleItemBought} from '../Store/lists';
+import {connect} from 'react-redux';
 
 
-export const ListItem = ({
-  listItemName,
-  unitName,
-  count,
-  editHandler,
-  deleteHandler,
-  editPage,
-}) => {
+export const ListItem = connect(null, {toggleItemBought})((props) => {
+
+  console.log("listitem",props)
+  const listId = props.listId;
+ const listItemId = props.listItemId;
+  console.log("listId", listId)
+  console.log("listItemId", listItemId)
+ 
   return (
-    <TouchableOpacity style={styles.container}>
-      {editPage ? (
-        <TouchableOpacity onPress={editHandler}>
+    <TouchableOpacity style={styles.container} onPress={() => props.toggleItemBought({listId, listItemId})}>
+      {props.editPage ? (
+        <TouchableOpacity onPress={props.editHandler}>
           <Image source={EditIcon} style={styles.icon} />
         </TouchableOpacity>
       ) : null}
 
       <View style={styles.textArea}>
-        <DefText>{listItemName}</DefText>
+        <DefText>{props.listItemName}</DefText>
 
         <View style={styles.totalCount}>
-          <DefText>x{count} </DefText>
-          <DefText>{unitName}</DefText>
+          <DefText>x{props.count} </DefText>
+          <DefText>{props.unitName}</DefText>
         </View>
       </View>
 
-      {editPage ? (
-        <TouchableOpacity onPress={deleteHandler}>
+      {props.editPage ? (
+        <TouchableOpacity onPress={props.deleteHandler}>
           <Image source={DeleteIcon} style={styles.icon} />
         </TouchableOpacity>
       ) : null}
     </TouchableOpacity>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

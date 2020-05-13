@@ -220,7 +220,7 @@ export function listReducer(state = initialState, action) {
     case TOGGLE_ITEM_BOUGHT:
       return {
         ...state,
-        oneTimelists: state.OneTimeLists.map((list) => {
+        OneTimeLists: state.OneTimeLists.map((list) => {
           if (list.id === action.payload.listId) {
             return {
               ...list,

@@ -20,6 +20,7 @@ export const SingleListStatic = connect(mapStateToProps)((props) => {
           <ListItem
             listItemName={listItem.name}
             editPage={false}
+            listId = {props.route.params.listId}
             listItemId={listItem.id}
             unitName={listItem.unit}
             count={listItem.count}
