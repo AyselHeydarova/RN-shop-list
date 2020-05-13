@@ -16,7 +16,7 @@ export const CustomDrawer = (props) => {
         <Image
           resizeMode="cover"
           style={styles.userImg}
-          source={DefaultAvatarImg}
+          source={{uri: DefaultAvatarImg}}
         />
         <DefText style={styles.username}>Username</DefText>
       </View>
