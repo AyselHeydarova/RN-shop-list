@@ -20,7 +20,7 @@ const mapStateToProps = (state) => ({
 const SingleListEdit = connect(mapStateToProps, {
   addListItem,
   deleteListItem,
-  updateListItem
+  updateListItem,
 })((props) => {
   const [fields, setFields] = useState({
     listId: props.route?.params?.listId,
@@ -30,16 +30,9 @@ const SingleListEdit = connect(mapStateToProps, {
     unit: "kg",
   });
 
-  console.log('listItemId', fields.listItemId)
-
   const [itemEditMode, setItemEditMode] = useState(false);
 
-  const units = [
-     "pkg",
-     "kg", 
-    "litre",
-    "bott",
-  ];
+  const units = ["pkg", "kg", "litre", "bott"];
 
   const indexOfList = props.OneTimeLists.findIndex(
     (list) => list.id === fields.listId
@@ -67,8 +60,8 @@ const SingleListEdit = connect(mapStateToProps, {
   };
 
   const updateItem = () => {
-    props.updateListItem(fields)
-  }
+    props.updateListItem(fields);
+  };
 
   const increment = () => {
     setFields((fields) => ({
@@ -130,7 +123,9 @@ const SingleListEdit = connect(mapStateToProps, {
         {units.map((unit) => (
           <TouchableOpacity
             style={styles.count}
-            onPress={() => {unitHandler(unit)}}
+            onPress={() => {
+              unitHandler(unit);
+            }}
           >
             <DefText>{unit}</DefText>
           </TouchableOpacity>
@@ -138,9 +133,17 @@ const SingleListEdit = connect(mapStateToProps, {
       </View>
 
       {itemEditMode ? (
-        <View style ={styles.row}>
-          <CustomBtn title="cancel" style={{width: 150}} onPress= {()=> setItemEditMode(false)} />
-          <CustomBtn title="update" style={{width: 150}} onPress={updateItem}/>
+        <View style={styles.row}>
+          <CustomBtn
+            title="cancel"
+            style={{ width: 150 }}
+            onPress={() => setItemEditMode(false)}
+          />
+          <CustomBtn
+            title="update"
+            style={{ width: 150 }}
+            onPress={updateItem}
+          />
         </View>
       ) : (
         <CustomBtn
@@ -156,6 +159,7 @@ const SingleListEdit = connect(mapStateToProps, {
         {props.OneTimeLists[indexOfList].listItems.map((listItem) => (
           <ListItem
             listItemName={listItem.name}
+            editPage={true}
             listItemId={listItem.id}
             unitName={listItem.unit}
             count={listItem.count}

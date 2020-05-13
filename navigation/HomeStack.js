@@ -6,43 +6,60 @@ import { COLORS } from "../styles/colors";
 import { UserSettings } from "../Components/UserSettings";
 import RegularLists from "../Components/RegularLists";
 import SingleListEdit from "../Components/SingleListEdit";
-import { Image } from "react-native";
-import SaveIcon from '../assets/Save.png'
+import SaveIcon from "../assets/Save.png";
+import EditIcon from "../assets/Pen.png";
+import { IconBtn } from "../Components/IconBtn";
+import { SingleListStatic } from "../Components/SingleListStatic";
 
 const { Navigator, Screen } = createStackNavigator();
 
 const HomeStack = () => {
   return (
-    <Navigator>
+    <Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: COLORS.red,
+        },
+        headerTitleStyle: {
+          color: "white",
+          fontSize: 18,
+          fontFamily: "MontserratRegular",
+        },
+      }}
+    >
       <Screen
         name="homePage"
         component={HomePage}
         options={{
           title: "One Time Lists",
-          headerStyle: {
-            backgroundColor: COLORS.red,
-          },
-          headerTitleStyle: {
-            color: "white",
-            fontFamily: "MontserratRegular",
-          },
         }}
       />
 
       <Screen
         name="singleEdit"
         component={SingleListEdit}
+        options={({ route, navigation }) => ({
+          title: route.params.listName,
+          headerRight: () => (
+            <IconBtn
+              source={SaveIcon}
+              onPress={() =>
+                navigation.navigate("singleStatic", {
+                  listName: route.params.listName,
+                  listId: route.params.listId,
+                })
+              }
+            />
+          ),
+        })}
+      />
+
+      <Screen
+        name="singleStatic"
+        component={SingleListStatic}
         options={({ route }) => ({
           title: route.params.listName,
-          headerStyle: {
-            backgroundColor: COLORS.red,
-          },
-          headerTitleStyle: {
-            color: "white",
-            fontSize: 18,
-            fontFamily: "MontserratRegular",
-          },
-          headerRight: () => <Image source={SaveIcon} style={{width: 22, height: 22, marginRight:16}}/>
+          headerRight: () => <IconBtn source={EditIcon} />,
         })}
       />
 
@@ -51,13 +68,6 @@ const HomeStack = () => {
         component={RegularLists}
         options={{
           title: "Regular Lists",
-          headerStyle: {
-            backgroundColor: COLORS.red,
-          },
-          headerTitleStyle: {
-            color: "white",
-            fontFamily: "MontserratRegular",
-          },
         }}
       />
 
@@ -66,13 +76,6 @@ const HomeStack = () => {
         component={CreateList}
         options={{
           title: "New List",
-          headerStyle: {
-            backgroundColor: COLORS.red,
-          },
-          headerTitleStyle: {
-            color: "white",
-            fontFamily: "MontserratRegular",
-          },
         }}
       />
 
@@ -81,13 +84,6 @@ const HomeStack = () => {
         component={UserSettings}
         options={{
           title: "User Settings",
-          headerStyle: {
-            backgroundColor: COLORS.red,
-          },
-          headerTitleStyle: {
-            color: "white",
-            fontFamily: "MontserratRegular",
-          },
         }}
       />
     </Navigator>

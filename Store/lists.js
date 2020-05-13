@@ -1,3 +1,5 @@
+import { ToolbarAndroid } from "react-native";
+
 // Actions
 export const CREATE_ONE_TIME_LIST = "CREATE_ONE_TIME_LIST";
 export const CREATE_REGULAR_LIST = "CREATE_REGULAR_LIST";
@@ -6,6 +8,7 @@ export const CHANGE_URL = "CHANGE_URL";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
 export const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
 export const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
+export const TOGGLE_ITEM_BOUGHT = "TOGGLE_ITEM_BOUGHT";
 
 // Action Creators
 
@@ -44,6 +47,11 @@ export const updateListItem = (payload) => ({
   payload,
 });
 
+export const toggleItemBought = (payload) => ({
+  type: TOGGLE_ITEM_BOUGHT,
+  payload,
+});
+
 // Reducers
 
 const initialState = {
@@ -57,18 +65,21 @@ const initialState = {
           name: "List Item example",
           count: 0,
           unit: "kg",
+          bought: false,
         },
         {
           id: `${Math.random()}${Date.now()}`,
           name: "List Item example",
           count: 0,
           unit: "kg",
+          bought: false,
         },
         {
           id: `${Math.random()}${Date.now()}`,
           name: "List Item example",
           count: 0,
           unit: "kg",
+          bought: false,
         },
       ],
     },
@@ -84,6 +95,7 @@ const initialState = {
           name: "Regular List Item example",
           count: 2,
           unit: "kg",
+          bought: false,
         },
       ],
     },
@@ -168,7 +180,7 @@ export function listReducer(state = initialState, action) {
       }
 
       return indexIsFound ? updatedState : state;
-    } 
+    }
     case UPDATE_LIST_ITEM: {
       const updatedState = { ...state };
       updatedState.OneTimeLists = [...updatedState.OneTimeLists];
@@ -179,33 +191,53 @@ export function listReducer(state = initialState, action) {
 
       const indexIsFound = listIndex > -1;
 
-      const listItemIndex = updatedState.OneTimeLists[listIndex].listItems.findIndex(
+      const listItemIndex = updatedState.OneTimeLists[
+        listIndex
+      ].listItems.findIndex(
         (listItem) => listItem.id === action.payload.listItemId
-      )
-      
+      );
+
       if (indexIsFound) {
         updatedState.OneTimeLists[listIndex] = {
           ...updatedState.OneTimeLists[listIndex],
           listItems: [
-            
             ...updatedState.OneTimeLists[listIndex].listItems.filter(
               (listItem) => listItem.id !== action.payload.listItemId
             ),
 
-            updatedState.OneTimeLists[listIndex].listItems[listItemIndex] = {
-              
-                id: `${Math.random()}${Date.now()}`,
-                name: action.payload.name,
-                count: action.payload.count,
-                unit: action.payload.unit,
-              
-            }      
+            (updatedState.OneTimeLists[listIndex].listItems[listItemIndex] = {
+              id: `${Math.random()}${Date.now()}`,
+              name: action.payload.name,
+              count: action.payload.count,
+              unit: action.payload.unit,
+            }),
           ],
         };
       }
 
       return indexIsFound ? updatedState : state;
     }
+    case TOGGLE_ITEM_BOUGHT:
+      return {
+        ...state,
+        oneTimelists: state.OneTimeLists.map((list) => {
+          if (list.id === action.payload.listId) {
+            return {
+              ...list,
+              listItems: list.listItems.map((listItem) => {
+                if (listItem.id === action.payload.listItemId) {
+                  return {
+                    ...listItem,
+                    bought: !listItem.bought,
+                  };
+                }
+                return listItem;
+              }),
+            };
+          }
+          return list;
+        }),
+      };
 
     default:
       return state;

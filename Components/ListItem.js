@@ -6,29 +6,44 @@ import {
   Dimensions,
   Image,
 } from "react-native";
+
 import { DefText } from "../Commons/DefText";
 import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
 import { COLORS } from "../styles/colors";
 
-export const ListItem = ({ listItemName, unitName, count, editHandler, deleteHandler }) => {
+
+export const ListItem = ({
+  listItemName,
+  unitName,
+  count,
+  editHandler,
+  deleteHandler,
+  editPage,
+}) => {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={editHandler}>
-        <Image source={EditIcon} style={styles.icon} />
-      </TouchableOpacity>
+    <TouchableOpacity style={styles.container}>
+      {editPage ? (
+        <TouchableOpacity onPress={editHandler}>
+          <Image source={EditIcon} style={styles.icon} />
+        </TouchableOpacity>
+      ) : null}
+
       <View style={styles.textArea}>
         <DefText>{listItemName}</DefText>
-        <DefText>{count}</DefText>
-        <DefText>{unitName}</DefText>
-        
 
+        <View style={styles.totalCount}>
+          <DefText>x{count} </DefText>
+          <DefText>{unitName}</DefText>
+        </View>
       </View>
 
-      <TouchableOpacity onPress = { deleteHandler }>
-        <Image source={DeleteIcon} style={styles.icon} />
-      </TouchableOpacity>
-    </View>
+      {editPage ? (
+        <TouchableOpacity onPress={deleteHandler}>
+          <Image source={DeleteIcon} style={styles.icon} />
+        </TouchableOpacity>
+      ) : null}
+    </TouchableOpacity>
   );
 };
 
@@ -49,9 +64,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 120,
     paddingHorizontal: 10,
     display: "flex",
-    flexDirection: 'row',
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+  },
+
+  totalCount: {
+    flexDirection: "row",
   },
 
   icon: {
