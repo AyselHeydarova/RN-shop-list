@@ -5,6 +5,8 @@ import { Drawer } from "./navigation/Drawer";
 import { Provider } from "react-redux";
 import store from "./Store/store";
 
+import {RegularLists} from './Components/RegularLists'
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
 

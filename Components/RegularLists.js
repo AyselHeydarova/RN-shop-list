@@ -1,25 +1,46 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { COLORS } from "../styles/colors";
-import { DefText } from "../Commons/DefText";
+import { StyleSheet, View } from "react-native";
+import { ListView } from "../Components/ListView";
 
-const RegularLists = () => {
+import { connect } from "react-redux";
+
+const mapStateToProps = (state) => ({
+  RegularLists: state.lists.AllLists.filter(
+    (list) => list.listType === "Regular"
+  ),
+});
+
+export const RegularLists = connect(mapStateToProps)((props) => {
+
+  console.log("REgular", props)
   return (
     <View style={styles.container}>
-      <DefText >Regular Listsss!!</DefText>
+      <View>
+        {props.RegularLists.map((list) => (
+          <ListView
+            listId={list.id}
+            listName={list.name}
+            key={list.id}
+            listItemsLength={list.listItems.length}
+            onPress={(listId) =>
+              props.navigation.navigate("singleEdit", {
+                listName: list.name,
+                listId: listId,
+                listType: "Regular",
+              })
+            }
+          />
+        ))}
+      </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.gray,
-    alignItems: "center",
-    justifyContent: "center",
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
+    padding: 16,
   },
 });
 
-export default RegularLists;
+

@@ -22,9 +22,11 @@ export const ListItem = connect(null, {toggleItemBought})((props) => {
  const listItemId = props.listItemId;
   console.log("listId", listId)
   console.log("listItemId", listItemId)
+
+  const customStyle = props.style
  
   return (
-    <TouchableOpacity style={styles.container} onPress={() => props.toggleItemBought({listId, listItemId})}>
+    <TouchableOpacity style={{...styles.container, ...customStyle}} onPress={() => props.toggleItemBought({listId, listItemId})}>
       {props.editPage ? (
         <TouchableOpacity onPress={props.editHandler}>
           <Image source={EditIcon} style={styles.icon} />

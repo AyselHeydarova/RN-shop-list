@@ -15,7 +15,13 @@ import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
-  OneTimeLists: state.lists.OneTimeLists,
+  OneTimeLists: state.lists.AllLists.filter(
+    (list) => list.listType === "OneTimeList"
+  ),
+  RegularLists: state.lists.AllLists.filter(
+    (list) => list.listType === "Regular"
+  ),
+  allLists: state.lists.AllLists
 });
 const SingleListEdit = connect(mapStateToProps, {
   addListItem,
@@ -34,7 +40,15 @@ const SingleListEdit = connect(mapStateToProps, {
 
   const units = ["pkg", "kg", "litre", "bott"];
 
-  const indexOfList = props.OneTimeLists.findIndex(
+  const indexOfListOneTime = props.OneTimeLists.findIndex(
+    (list) => list.id === fields.listId
+  );
+
+  const indexOfListRegular = props.RegularLists.findIndex(
+    (list) => list.id === fields.listId
+  );
+
+  const indexOfAllLists = props.allLists.findIndex(
     (list) => list.id === fields.listId
   );
 
@@ -45,7 +59,8 @@ const SingleListEdit = connect(mapStateToProps, {
     }));
   };
 
-  const allListItems = props.OneTimeLists[indexOfList].listItems;
+  const allListItems = props.allLists[indexOfAllLists].listItems
+
 
   const handleEdit = (idvalue) => {
     const indexOfListItem = allListItems.findIndex(
@@ -156,17 +171,29 @@ const SingleListEdit = connect(mapStateToProps, {
       <View style={styles.line} />
 
       <View>
-        {props.OneTimeLists[indexOfList].listItems.map((listItem) => (
-          <ListItem
-            listItemName={listItem.name}
-            editPage={true}
-            listItemId={listItem.id}
-            unitName={listItem.unit}
-            count={listItem.count}
-            editHandler={() => handleEdit(listItem.id)}
-            deleteHandler={() => handleDelete(listItem.id)}
-          />
-        ))}
+        {props.route.params.listType === "OneTime"
+          ? props.OneTimeLists[indexOfListOneTime].listItems.map((listItem) => (
+              <ListItem
+                listItemName={listItem.name}
+                editPage={true}
+                listItemId={listItem.id}
+                unitName={listItem.unit}
+                count={listItem.count}
+                editHandler={() => handleEdit(listItem.id)}
+                deleteHandler={() => handleDelete(listItem.id)}
+              />
+            ))
+          : props.RegularLists[indexOfListRegular].listItems.map((listItem) => (
+              <ListItem
+                listItemName={listItem.name}
+                editPage={true}
+                listItemId={listItem.id}
+                unitName={listItem.unit}
+                count={listItem.count}
+                editHandler={() => handleEdit(listItem.id)}
+                deleteHandler={() => handleDelete(listItem.id)}
+              />
+            ))}
       </View>
     </View>
   );

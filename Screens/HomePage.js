@@ -5,7 +5,9 @@ import { ListView } from "../Components/ListView";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
-  OneTimeLists: state.lists.OneTimeLists,
+  OneTimeLists: state.lists.AllLists.filter(
+    (list) => list.listType === "OneTimeList"
+  ),
 });
 
 const HomePage = connect(mapStateToProps)((props) => {
@@ -24,6 +26,7 @@ const HomePage = connect(mapStateToProps)((props) => {
               props.navigation.navigate("singleEdit", {
                 listName: list.name,
                 listId: listId,
+                listType: "OneTime"
               })
             }
           />

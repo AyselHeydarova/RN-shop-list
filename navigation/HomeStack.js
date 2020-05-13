@@ -4,10 +4,11 @@ import HomePage from "../Screens/HomePage";
 import CreateList from "../Components/CreateList";
 import { COLORS } from "../styles/colors";
 import { UserSettings } from "../Components/UserSettings";
-import RegularLists from "../Components/RegularLists";
+import { RegularLists } from "../Components/RegularLists";
 import SingleListEdit from "../Components/SingleListEdit";
 import SaveIcon from "../assets/Save.png";
 import EditIcon from "../assets/Pen.png";
+import Burger from "../assets/burger.png"
 import { IconBtn } from "../Components/IconBtn";
 import { SingleListStatic } from "../Components/SingleListStatic";
 
@@ -30,9 +31,10 @@ const HomeStack = () => {
       <Screen
         name="homePage"
         component={HomePage}
-        options={{
+        options={({navigation }) => ({
           title: "One Time Lists",
-        }}
+          headerRight: () => (<IconBtn source={Burger} onPress={() => navigation.openDrawer()}/>)
+        })}
       />
 
       <Screen
@@ -47,6 +49,7 @@ const HomeStack = () => {
                 navigation.navigate("singleStatic", {
                   listName: route.params.listName,
                   listId: route.params.listId,
+                  listType: route.params.listType
                 })
               }
             />
