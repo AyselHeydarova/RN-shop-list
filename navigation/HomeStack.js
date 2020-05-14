@@ -1,16 +1,18 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import HomePage from "../Screens/HomePage";
 import CreateList from "../Components/CreateList";
 import { COLORS } from "../styles/colors";
 import { UserSettings } from "../Components/UserSettings";
 import { RegularLists } from "../Components/RegularLists";
 import SingleListEdit from "../Components/SingleListEdit";
+import { SingleListStatic } from "../Components/SingleListStatic";
+import { IconBtn } from "../Components/IconBtn";
+
 import SaveIcon from "../assets/Save.png";
 import EditIcon from "../assets/Pen.png";
 import Burger from "../assets/burger.png";
-import { IconBtn } from "../Components/IconBtn";
-import { SingleListStatic } from "../Components/SingleListStatic";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -36,7 +38,6 @@ const HomeStack = () => {
           headerRight: () => (
             <IconBtn source={Burger} onPress={() => navigation.openDrawer()} />
           ),
-          
         })}
       />
 

@@ -21,7 +21,13 @@ const CreateList = connect(null, {
 
   const createList = async () => {
     props.createList({ name, listType });
-    props.navigation.navigate("homePage");
+
+    if (listType === "Regular") {
+      props.navigation.navigate("regular");
+    } else {
+      props.navigation.navigate("homePage");
+    }
+    
   };
 
   const listNameHandler = (v) => {

@@ -12,7 +12,6 @@ export const ListView = ({
 }) => {
 
   const progressPercentage =  boughtCount/listItemsLength  ;
-  console.log(progressPercentage)
   return (
     <TouchableOpacity
       style={styles.container}
@@ -23,12 +22,11 @@ export const ListView = ({
         {listName}
       </DefText>
       <DefText>
-        {" "}
         {boughtCount}/ {listItemsLength}
       </DefText>
 
       <View style={styles.progressWrapper}>
-        <View style={[styles.progress , {width: 300 * progressPercentage}]} />
+        <View style={[styles.progress , progressPercentage ? {width: 300 * progressPercentage} : null]} />
       </View>
     </TouchableOpacity>
   );
