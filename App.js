@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
+import {Text} from "react-native";
 import {AppLoading} from "expo";
 import {loadFonts} from "./styles/fonts";
 import {Drawer} from "./navigation/Drawer";
 import {Provider} from "react-redux";
 // import store from "./Store/store";
+
 
 import {createStore, combineReducers} from "redux";
 import {listReducer, userReducer} from "./Store/lists";
@@ -24,50 +26,56 @@ let store = createStore(
 class App extends Component {
     state = {
         loaded: false,
-        store: store
+        store: store,
+        isStoreLoading: true,
     };
 
-    componentWillMount () {
-        const retrieveData = async () => {
-            try {
-                const retrievedValue = await AsyncStorage.getItem('completeStore');
-                retrievedValue.then((value) => {
-                    if (value && value.length) {
-                        let initialStore = JSON.parse(value);
-                        this.setState({store: createStore(
-                                allReducers, initialStore,
-                                window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-                            ) })
-                    } else {
-                        this.setState({store: store})
-                    }
-            })} catch(error)  {
-                        console.log(error);
-                        this.setState({store:store})
 
+    retrieveData = async () => {
+        try {
+            const retrievedValue = await AsyncStorage.getItem('completeStore');
+            retrievedValue.then((value) => {
+                if (value && value.length) {
+                    let initialStore = JSON.parse(value);
+                    this.setState({store: createStore(
+                            allReducers, initialStore,
+                            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+                        ) })
+                    this.setState({isStoreLoading: false})
+                } else {
+                    this.setState({store: store})
+                    this.setState({isStoreLoading: false})
+                }
+            })} catch(error)  {
+            console.log(error);
+            this.setState({store:store})
+            this.setState({isStoreLoading: false})
+
+        }};
+
+    storeData = async () => {
+        let storingValue = JSON.stringify(this.state.store.getState());
+        try {
+            await AsyncStorage.setItem('completeStore', storingValue)
+        } catch (error) {
+            console.log(error)
         }
-        } ;
-        return retrieveData
+    };
+
+    componentWillMount() {
+        this.retrieveData();
     }
 
     componentWillUnmount() {
-        let storingValue = JSON.stringify(this.state.store.getState());
-
-        const storeData = async () => {
-            try {
-                await AsyncStorage.setItem('completeStore', storingValue)
-            } catch (error) {
-                console.log(error)
-            }
-        };
-        return storeData
-    }
-
+       this.storeData();
+    };
 
 
     render() {
 
-        if (!this.state.loaded) {
+
+
+        if (!this.state.loaded ) {
             return (
                 <AppLoading
                     startAsync={loadFonts}
@@ -75,7 +83,10 @@ class App extends Component {
                     onFinish={() => this.setState({loaded: true})}
                 />
             )
-        } else {
+        } else if (this.state.isStoreLoading) {
+            return (<Text>Loading Store ...</Text>)
+        }
+        else {
             return (<Provider store={this.state.store}>
                 <Drawer/>
             </Provider>)
