@@ -8,7 +8,7 @@ import { RegularLists } from "../Components/RegularLists";
 import SingleListEdit from "../Components/SingleListEdit";
 import SaveIcon from "../assets/Save.png";
 import EditIcon from "../assets/Pen.png";
-import Burger from "../assets/burger.png"
+import Burger from "../assets/burger.png";
 import { IconBtn } from "../Components/IconBtn";
 import { SingleListStatic } from "../Components/SingleListStatic";
 
@@ -31,9 +31,12 @@ const HomeStack = () => {
       <Screen
         name="homePage"
         component={HomePage}
-        options={({navigation }) => ({
+        options={({ navigation }) => ({
           title: "One Time Lists",
-          headerRight: () => (<IconBtn source={Burger} onPress={() => navigation.openDrawer()}/>)
+          headerRight: () => (
+            <IconBtn source={Burger} onPress={() => navigation.openDrawer()} />
+          ),
+          
         })}
       />
 
@@ -49,7 +52,7 @@ const HomeStack = () => {
                 navigation.navigate("singleStatic", {
                   listName: route.params.listName,
                   listId: route.params.listId,
-                  listType: route.params.listType
+                  listType: route.params.listType,
                 })
               }
             />

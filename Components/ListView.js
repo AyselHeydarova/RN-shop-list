@@ -1,16 +1,35 @@
 import React from "react";
-import { View, StyleSheet, Dimensions,TouchableOpacity } from "react-native";
+import { StyleSheet, Dimensions, TouchableOpacity, View } from "react-native";
 import { DefText } from "../Commons/DefText";
 import { COLORS } from "../styles/colors";
 
-export const ListView = ({ listName, listItemsLength, onPress, listId }) => {
+export const ListView = ({
+  listName,
+  listItemsLength,
+  onPress,
+  listId,
+  boughtCount,
+}) => {
 
+  const progressPercentage =  boughtCount/listItemsLength  ;
+  console.log(progressPercentage)
   return (
-    <TouchableOpacity style={styles.container} id={listId} onPress={()=> onPress(listId)}>
+    <TouchableOpacity
+      style={styles.container}
+      id={listId}
+      onPress={() => onPress(listId)}
+    >
       <DefText weight="medium" style={styles.text}>
         {listName}
       </DefText>
-      <DefText>{listItemsLength}</DefText>
+      <DefText>
+        {" "}
+        {boughtCount}/ {listItemsLength}
+      </DefText>
+
+      <View style={styles.progressWrapper}>
+        <View style={[styles.progress , {width: 300 * progressPercentage}]} />
+      </View>
     </TouchableOpacity>
   );
 };
@@ -29,4 +48,18 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
   },
+
+  progressWrapper: {
+    width: 300,
+    height: 20,
+    backgroundColor: COLORS.gray,
+    borderRadius: 10
+  },
+
+  progress: {
+    height: 20,
+    width: 0,
+    backgroundColor: COLORS.yellow,
+    borderRadius: 10
+  }
 });

@@ -5,23 +5,26 @@ import { ListView } from "../Components/ListView";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
-  RegularLists: state.lists.AllLists.filter(
-    (list) => list.listType === "Regular"
-  ),
+  allLists: state.lists.AllLists,
 });
 
 export const RegularLists = connect(mapStateToProps)((props) => {
 
-  console.log("REgular", props)
+  const RegularLists = props.allLists.filter(
+    (list) => list.listType === "Regular"
+  );
   return (
     <View style={styles.container}>
       <View>
-        {props.RegularLists.map((list) => (
+        {RegularLists.map((list) => (
           <ListView
             listId={list.id}
             listName={list.name}
             key={list.id}
             listItemsLength={list.listItems.length}
+            boughtCount={
+              list.listItems.filter((item) => item.bought === true).length
+            }
             onPress={(listId) =>
               props.navigation.navigate("singleEdit", {
                 listName: list.name,
@@ -42,5 +45,3 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 });
-
-

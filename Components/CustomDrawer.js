@@ -5,20 +5,29 @@ import { DrawerContentScrollView } from "@react-navigation/drawer";
 import DefaultAvatarImg from "../assets/profile.png";
 import { COLORS } from "../styles/colors";
 import { DefText } from "../Commons/DefText";
+import { connect } from "react-redux";
 
-export const CustomDrawer = (props) => {
+const mapStateToProps = (state) => ({
+  userData: state.userSettings
+})
+
+export const CustomDrawer = connect(mapStateToProps)((props) => {
+
   return (
-    <View {...props} style={styles.container}>
+    <View  style={styles.container}>
       <TouchableOpacity style={styles.closeIcon}>
         <Image style={styles.closeIconImg} />
       </TouchableOpacity>
       <View style={styles.userInfo}>
-        <Image
+        <View style={styles.imageWrapper}>
+          <Image
           resizeMode="cover"
           style={styles.userImg}
-          source={{uri: DefaultAvatarImg}}
+          source={{uri: props.userData.url}}
         />
-        <DefText style={styles.username}>Username</DefText>
+        </View>
+        
+        <DefText style={styles.username}>{props.userData.username}</DefText>
       </View>
 
       <DrawerContentScrollView style={styles.containerList}>
@@ -45,7 +54,7 @@ export const CustomDrawer = (props) => {
           onPress={() => props.navigation.navigate("regular")}
         >
           <DefText style={styles.drawerTitle} weight="bold">
-            REgular Lists
+            Regular Lists
           </DefText>
         </TouchableOpacity>
 
@@ -60,7 +69,7 @@ export const CustomDrawer = (props) => {
       </DrawerContentScrollView>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -81,12 +90,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   userImg: {
-    width: 70,
-    height: 70,
+    width: "100%",
+    height: "100%",
     borderRadius: 35,
-    margin: 15,
+    
     overflow: "hidden",
   },
+  imageWrapper: {
+    width: 73,
+    height: 73,
+    borderRadius: 35,
+    borderWidth: 3,
+    margin: 15,
+    borderColor: COLORS.red,
+  },
+  
   username: {
     fontSize: 24,
     marginTop: 6,

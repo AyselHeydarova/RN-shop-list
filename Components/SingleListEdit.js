@@ -15,13 +15,7 @@ import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
-  OneTimeLists: state.lists.AllLists.filter(
-    (list) => list.listType === "OneTimeList"
-  ),
-  RegularLists: state.lists.AllLists.filter(
-    (list) => list.listType === "Regular"
-  ),
-  allLists: state.lists.AllLists
+  allLists: state.lists.AllLists,
 });
 const SingleListEdit = connect(mapStateToProps, {
   addListItem,
@@ -35,22 +29,21 @@ const SingleListEdit = connect(mapStateToProps, {
     count: 0,
     unit: "kg",
   });
-
   const [itemEditMode, setItemEditMode] = useState(false);
-
   const units = ["pkg", "kg", "litre", "bott"];
 
-  const indexOfListOneTime = props.OneTimeLists.findIndex(
-    (list) => list.id === fields.listId
+  let LIST_TYPE;
+  {
+    props.route.params.listType === "OneTime"
+      ? (LIST_TYPE = "OneTimeList")
+      : (LIST_TYPE = "Regular");
+  }
+
+  const chosenListType = props.allLists.filter(
+    (list) => list.listType === LIST_TYPE
   );
 
-  const indexOfListRegular = props.RegularLists.findIndex(
-    (list) => list.id === fields.listId
-  );
-
-  const indexOfAllLists = props.allLists.findIndex(
-    (list) => list.id === fields.listId
-  );
+  const index = chosenListType.findIndex((list) => list.id === fields.listId);
 
   const handleFieldChange = (name, value) => {
     setFields((fields) => ({
@@ -58,9 +51,10 @@ const SingleListEdit = connect(mapStateToProps, {
       [name]: value,
     }));
   };
-
-  const allListItems = props.allLists[indexOfAllLists].listItems
-
+  const indexOfAllLists = props.allLists.findIndex(
+    (list) => list.id === fields.listId
+  );
+  const allListItems = props.allLists[indexOfAllLists].listItems;
 
   const handleEdit = (idvalue) => {
     const indexOfListItem = allListItems.findIndex(
@@ -171,29 +165,18 @@ const SingleListEdit = connect(mapStateToProps, {
       <View style={styles.line} />
 
       <View>
-        {props.route.params.listType === "OneTime"
-          ? props.OneTimeLists[indexOfListOneTime].listItems.map((listItem) => (
-              <ListItem
-                listItemName={listItem.name}
-                editPage={true}
-                listItemId={listItem.id}
-                unitName={listItem.unit}
-                count={listItem.count}
-                editHandler={() => handleEdit(listItem.id)}
-                deleteHandler={() => handleDelete(listItem.id)}
-              />
-            ))
-          : props.RegularLists[indexOfListRegular].listItems.map((listItem) => (
-              <ListItem
-                listItemName={listItem.name}
-                editPage={true}
-                listItemId={listItem.id}
-                unitName={listItem.unit}
-                count={listItem.count}
-                editHandler={() => handleEdit(listItem.id)}
-                deleteHandler={() => handleDelete(listItem.id)}
-              />
-            ))}
+        {chosenListType[index].listItems.map((listItem) => (
+          <ListItem
+            listItemName={listItem.name}
+            editPage={true}
+            listItemId={listItem.id}
+            key={listItem.id}
+            unitName={listItem.unit}
+            count={listItem.count}
+            editHandler={() => handleEdit(listItem.id)}
+            deleteHandler={() => handleDelete(listItem.id)}
+          />
+        ))}
       </View>
     </View>
   );

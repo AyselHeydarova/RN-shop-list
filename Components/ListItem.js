@@ -11,22 +11,19 @@ import { DefText } from "../Commons/DefText";
 import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
 import { COLORS } from "../styles/colors";
-import {toggleItemBought} from '../Store/lists';
-import {connect} from 'react-redux';
+import { toggleItemBought } from "../Store/lists";
+import { connect } from "react-redux";
 
-
-export const ListItem = connect(null, {toggleItemBought})((props) => {
-
-  console.log("listitem",props)
+export const ListItem = connect(null, { toggleItemBought })((props) => {
   const listId = props.listId;
- const listItemId = props.listItemId;
-  console.log("listId", listId)
-  console.log("listItemId", listItemId)
+  const listItemId = props.listItemId;
+  const customStyle = props.style;
 
-  const customStyle = props.style
- 
   return (
-    <TouchableOpacity style={{...styles.container, ...customStyle}} onPress={() => props.toggleItemBought({listId, listItemId})}>
+    <TouchableOpacity
+      style={{ ...styles.container, ...customStyle }}
+      onPress={() => props.toggleItemBought({ listId, listItemId })}
+    >
       {props.editPage ? (
         <TouchableOpacity onPress={props.editHandler}>
           <Image source={EditIcon} style={styles.icon} />

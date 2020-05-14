@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-} from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 import { COLORS } from "../styles/colors";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { DefText } from "../Commons/DefText";
@@ -11,16 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { createList } from "../Store/lists";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state) => ({
-  OneTimeLists: state.lists.AllLists.filter(
-    (list) => list.listType === "OneTimeList"
-  ),
-  RegularLists: state.lists.AllLists.filter(
-    (list) => list.listType === "Regular"
-  ),
-});
-
-const CreateList = connect(mapStateToProps, {
+const CreateList = connect(null, {
   createList,
 })((props) => {
   const [listFields, setListFields] = useState({
@@ -43,10 +30,8 @@ const CreateList = connect(mapStateToProps, {
 
   const listTypeHandler = (type) => {
     setIsOneTimeList(true);
-    setListFields((fields) => ({ ...fields, listType: type }))
-  } 
-
-  
+    setListFields((fields) => ({ ...fields, listType: type }));
+  };
 
   return (
     <View style={styles.container}>

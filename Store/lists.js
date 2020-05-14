@@ -1,7 +1,7 @@
 // Actions
 export const CREATE_LIST = "CREATE_LIST";
-export const CHANGE_USERNAME = "CHANGE_USERNAME";
-export const CHANGE_URL = "CHANGE_URL";
+
+export const CHANGE_USERNAME_AND_URL = "CHANGE_USERNAME_AND_URL";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
 export const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
 export const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
@@ -14,8 +14,8 @@ export const createList = (payload) => ({
   payload,
 });
 
-export const changeUsername = (payload) => ({
-  type: CHANGE_USERNAME,
+export const changeUsernameAndUrl = (payload) => ({
+  type: CHANGE_USERNAME_AND_URL,
   payload,
 });
 
@@ -121,7 +121,7 @@ export function listReducer(state = initialState, action) {
       if (indexIsFound) {
         updatedState.AllLists[listIndex] = {
           ...updatedState.AllLists[listIndex],
-          
+
           listItems: [
             ...updatedState.AllLists[listIndex].listItems,
             {
@@ -220,22 +220,18 @@ export function listReducer(state = initialState, action) {
 }
 
 const firstState = {
-  username: "John Smith",
-  url: "",
+  username: "John sudhaisd",
+  url: "https://image.flaticon.com/icons/svg/2922/2922572.svg",
 };
 
 export function userReducer(state = firstState, action) {
   switch (action.type) {
-    case CHANGE_USERNAME: {
+    case CHANGE_USERNAME_AND_URL: {
       return {
         ...state,
-        username: action.payload,
-      };
-    }
-    case CHANGE_URL: {
-      return {
-        ...state,
-        url: action.payload,
+
+        username: action.payload.username,
+        url: action.payload.url,
       };
     }
     default:
