@@ -6,6 +6,7 @@ import { DefText } from "../Commons/DefText";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { createList } from "../Store/lists";
 import { connect } from "react-redux";
+import { Layout } from "../Commons/Layout";
 
 const CreateList = connect(null, {
   createList,
@@ -27,7 +28,6 @@ const CreateList = connect(null, {
     } else {
       props.navigation.navigate("homePage");
     }
-    
   };
 
   const listNameHandler = (v) => {
@@ -40,7 +40,7 @@ const CreateList = connect(null, {
   };
 
   return (
-    <View style={styles.container}>
+    <Layout title={"New List"} backBtn={false}>
       <DefText weight="medium">list name</DefText>
       <TextInput
         style={styles.input}
@@ -52,9 +52,12 @@ const CreateList = connect(null, {
         <TouchableOpacity
           style={{
             ...styles.radio,
-            backgroundColor: isOneTimeList ? COLORS.red : COLORS.gray,
+            opacity: isOneTimeList ? 1 : 0.5,
           }}
-          onPress={() => listTypeHandler("OneTimeList")}
+          onPress={() => {
+            listTypeHandler("OneTimeList");
+            setIsOneTimeList(true);
+          }}
         >
           <DefText style={styles.radioText} weight="bold">
             One Time
@@ -64,9 +67,9 @@ const CreateList = connect(null, {
         <TouchableOpacity
           style={{
             ...styles.radio,
-            backgroundColor: isOneTimeList ? COLORS.gray : COLORS.red,
+            opacity: isOneTimeList ? 0.5 : 1,
           }}
-          onPress={() => listTypeHandler("Regular")}
+          onPress={() => {listTypeHandler("Regular"); setIsOneTimeList(false);}}
         >
           <DefText style={styles.radioText} weight="bold">
             Regular
@@ -74,8 +77,12 @@ const CreateList = connect(null, {
         </TouchableOpacity>
       </View>
 
-      <CustomBtn title="Create List" onPress={createList} />
-    </View>
+      <CustomBtn
+        title="Create List"
+        onPress={createList}
+        style={{ width: 350 }}
+      />
+    </Layout>
   );
 });
 const styles = StyleSheet.create({

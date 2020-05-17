@@ -4,8 +4,10 @@ export const CREATE_LIST = "CREATE_LIST";
 export const CHANGE_USERNAME_AND_URL = "CHANGE_USERNAME_AND_URL";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
 export const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
+export const DELETE_LIST = "DELETE_LIST";
 export const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
 export const TOGGLE_ITEM_BOUGHT = "TOGGLE_ITEM_BOUGHT";
+export const RESET_BOUGHT = "RESET_BOUGHT";
 
 // Action Creators
 
@@ -34,6 +36,11 @@ export const deleteListItem = (payload) => ({
   payload,
 });
 
+export const deleteList = (payload) => ({
+  type: DELETE_LIST,
+  payload,
+});
+
 export const updateListItem = (payload) => ({
   type: UPDATE_LIST_ITEM,
   payload,
@@ -41,6 +48,11 @@ export const updateListItem = (payload) => ({
 
 export const toggleItemBought = (payload) => ({
   type: TOGGLE_ITEM_BOUGHT,
+  payload,
+});
+
+export const resetBought = (payload) => ({
+  type: RESET_BOUGHT,
   payload,
 });
 
@@ -136,6 +148,15 @@ export function listReducer(state = initialState, action) {
 
       return indexIsFound ? updatedState : state;
     }
+    case DELETE_LIST: {
+      return {
+        ...state,
+        AllLists: state.AllLists.filter((list) => {
+          return list.id !== action.payload.listId;
+        }),
+      };
+    }
+
     case DELETE_LIST_ITEM: {
       const updatedState = { ...state };
       updatedState.AllLists = [...updatedState.AllLists];
@@ -207,6 +228,21 @@ export function listReducer(state = initialState, action) {
                   };
                 }
                 return listItem;
+              }),
+            };
+          }
+          return list;
+        }),
+      };
+    case RESET_BOUGHT:
+      return {
+        ...state,
+        AllLists: state.AllLists.map((list) => {
+          if (list.id === action.payload.listId) {
+            return {
+              ...list,
+              listItems: list.listItems.map((listItem) => {
+                return { ...listItem, bought: false };
               }),
             };
           }

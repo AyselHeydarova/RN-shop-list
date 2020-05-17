@@ -5,6 +5,9 @@ import { CustomBtn } from "../Commons/CustomBtn";
 import { DefText } from "../Commons/DefText";
 import { connect } from "react-redux";
 import {changeUsernameAndUrl} from "../Store/lists"
+import { Layout } from "../Commons/Layout";
+
+
 
 const mapStateToProps = (state) =>( {
   userData: state.userSettings
@@ -31,10 +34,12 @@ export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((pr
   }
 
   return (
-    <View style={styles.container}>
+    <Layout
+      title={"User Settings"}
+      backBtn={false}
+
+    >
       <DefText weight="medium">username</DefText>
-      <DefText weight="medium">{userFields.username}</DefText>
-      <DefText weight="medium">{userFields.url}</DefText>
       <TextInput
         style={styles.input}
         placeholder="Enter your Name"
@@ -49,16 +54,11 @@ export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((pr
       />
 
       <CustomBtn title="Save Changes"  onPress={saveChangesHandler}/>
-    </View>
+      </Layout>
   );
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 20,
-  },
 
   input: {
     backgroundColor: COLORS.gray,

@@ -13,6 +13,8 @@ import { ListItem } from "../Components/ListItem";
 
 import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
+import { Layout } from "../Commons/Layout";
+import SaveIcon from "../assets/Save.png";
 
 const mapStateToProps = (state) => ({
   allLists: state.lists.AllLists,
@@ -30,7 +32,13 @@ const SingleListEdit = connect(mapStateToProps, {
     unit: "kg",
   });
   const [itemEditMode, setItemEditMode] = useState(false);
-  const units = ["pkg", "kg", "litre", "bott"];
+
+  const [units, setUnits] = useState([
+    { unit: "pkg", clicked: false },
+    { unit: "kg", clicked: false },
+    { unit: "litre", clicked: false },
+    { unit: "bott", clicked: false },
+  ]);
 
   let LIST_TYPE;
   {
@@ -86,13 +94,22 @@ const SingleListEdit = connect(mapStateToProps, {
     }));
   };
 
+
+   const clickHandler = (index) => {
+    const newUnits = [...units];
+    newUnits.forEach((unit) => (unit.clicked = false));
+    newUnits[index].clicked = true;
+    setUnits(newUnits);
+  };
+
+
   const unitHandler = (value) => {
     setFields((fields) => ({
       ...fields,
       unit: value,
     }));
   };
-
+ 
   const createListItem = () => {
     props.addListItem(fields);
   };
@@ -102,7 +119,20 @@ const SingleListEdit = connect(mapStateToProps, {
   };
 
   return (
-    <View style={styles.container}>
+    <Layout
+      title={props.route.params.listName}
+      source={SaveIcon}
+      backBtn={true}
+
+      onPress={() =>
+        props.navigation.navigate("singleStatic", {
+          listName: props.route.params.listName,
+          listId: props.route.params.listId,
+          listType: props.route.params.listType,
+        })
+      }
+      goBack={() => props.navigation.goBack()}
+    >
       <View style={styles.row}>
         <View style={styles.center}>
           <DefText weight="medium">position name</DefText>
@@ -129,14 +159,18 @@ const SingleListEdit = connect(mapStateToProps, {
       </View>
 
       <View style={styles.row}>
-        {units.map((unit) => (
+        {units.map((unit, index) => (
           <TouchableOpacity
-            style={styles.count}
-            onPress={() => {
-              unitHandler(unit);
+            onPress={(unit) => {
+              unitHandler(unit.unit);
+              clickHandler(index);
             }}
+            style={[styles.count, { opacity: unit.clicked ? 1 : 0.2 }]}
+            key={index}
           >
-            <DefText>{unit}</DefText>
+            <DefText weight={unit.clicked ? "bold" : "regular"}>
+              {unit.unit}
+            </DefText>
           </TouchableOpacity>
         ))}
       </View>
@@ -178,7 +212,7 @@ const SingleListEdit = connect(mapStateToProps, {
           />
         ))}
       </View>
-    </View>
+    </Layout>
   );
 });
 
@@ -212,6 +246,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
     backgroundColor: COLORS.gray,
+    opacity: 1,
     height: 40,
     width: 80,
     borderRadius: 30,

@@ -1,24 +1,31 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import { ListView } from "../Components/ListView";
+import Burger from "../assets/burger.png";
 
 import { connect } from "react-redux";
+import { Layout } from "../Commons/Layout";
 
 const mapStateToProps = (state) => ({
   allLists: state.lists.AllLists,
 });
 
 export const RegularLists = connect(mapStateToProps)((props) => {
-
   const RegularLists = props.allLists.filter(
     (list) => list.listType === "Regular"
   );
   return (
-    <View style={styles.container}>
+    <Layout
+      title={"Regular Lists"}
+      source={Burger}
+      backBtn={false}
+      onPress={() => props.navigation.openDrawer()}
+    >
       <View>
         {RegularLists.map((list) => (
           <ListView
             listId={list.id}
+          
             listName={list.name}
             key={list.id}
             listItemsLength={list.listItems.length}
@@ -35,7 +42,7 @@ export const RegularLists = connect(mapStateToProps)((props) => {
           />
         ))}
       </View>
-    </View>
+    </Layout>
   );
 });
 

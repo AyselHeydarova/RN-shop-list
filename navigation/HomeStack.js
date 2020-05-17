@@ -19,6 +19,7 @@ const { Navigator, Screen } = createStackNavigator();
 const HomeStack = () => {
   return (
     <Navigator
+      headerMode="none"
       screenOptions={{
         headerStyle: {
           backgroundColor: COLORS.red,

@@ -14,5 +14,6 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     marginRight: 16,
+    marginTop: 10,
   },
 });
