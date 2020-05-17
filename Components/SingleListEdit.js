@@ -15,6 +15,7 @@ import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
 import { Layout } from "../Commons/Layout";
 import SaveIcon from "../assets/Save.png";
+import { CustomInput } from "../Commons/CustomInput";
 
 const mapStateToProps = (state) => ({
   allLists: state.lists.AllLists,
@@ -110,15 +111,15 @@ const SingleListEdit = connect(mapStateToProps, {
 
   const createListItem = () => {
     props.addListItem(fields);
-    // setFields((fields) => ({
-    //   ...fields,
-    //   name: "",
-    //   count: 0,
-    // }));
+    setFields((fields) => ({
+      ...fields,
+      name: "",
+      count: 0,
+    }));
 
-    // const newUnits = [...units];
-    // newUnits.forEach((unit) => (unit.clicked = false));
-    // setUnits(newUnits);
+    const newUnits = [...units];
+    newUnits.forEach((unit) => (unit.clicked = false));
+    setUnits(newUnits);
   };
 
   const handleDelete = (listItemId) => {
@@ -142,11 +143,10 @@ const SingleListEdit = connect(mapStateToProps, {
       <View style={styles.row}>
         <View style={styles.center}>
           <DefText weight="medium">position name</DefText>
-          <TextInput
-            style={styles.input}
-            value={fields.name}
-            onChangeText={(v) => handleFieldChange("name", v)}
-          />
+
+          <CustomInput value={fields.name}
+            onChangeText={(v) => handleFieldChange("name", v)}/>
+         
         </View>
 
         <View style={styles.center}>
@@ -165,12 +165,14 @@ const SingleListEdit = connect(mapStateToProps, {
       </View>
 
       <View style={styles.row}>
+
         {units.map((unit, index) => (
           <View style={[styles.count, { opacity: unit.clicked ? 1 : 0.2 }]}>
             <TouchableOpacity
               onPress={(unit) => {
                 unitHandler(unit.unit);
                 clickHandler(index);
+                console.log("clicked")
               }}
               key={index}
             >
@@ -228,14 +230,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
   },
-  input: {
-    backgroundColor: COLORS.gray,
-    width: 270,
-    height: 42,
-    borderRadius: 45,
-    paddingHorizontal: 15,
-    margin: 10,
-  },
+
   row: {
     display: "flex",
     flexDirection: "row",

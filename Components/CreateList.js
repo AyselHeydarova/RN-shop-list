@@ -7,6 +7,9 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { createList } from "../Store/lists";
 import { connect } from "react-redux";
 import { Layout } from "../Commons/Layout";
+import { CustomInput } from "../Commons/CustomInput";
+
+
 
 const CreateList = connect(null, {
   createList,
@@ -42,11 +45,9 @@ const CreateList = connect(null, {
   return (
     <Layout title={"New List"} backBtn={false}>
       <DefText weight="medium">list name</DefText>
-      <TextInput
-        style={styles.input}
-        placeholder="Something for me"
-        onChangeText={(value) => listNameHandler(value)}
-      />
+      <CustomInput placeholder="Something for me"
+        onChangeText={(value) => listNameHandler(value)}/>
+
 
       <View style={styles.radioWrapper}>
         <TouchableOpacity
@@ -101,14 +102,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 
-  input: {
-    backgroundColor: COLORS.gray,
-    width: 340,
-    padding: 15,
-    borderRadius: 30,
-  },
-
-  radioWrapper: {
+   radioWrapper: {
     display: "flex",
     flexDirection: "row",
   },

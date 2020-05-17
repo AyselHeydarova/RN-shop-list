@@ -6,6 +6,7 @@ import { DefText } from "../Commons/DefText";
 import { connect } from "react-redux";
 import {changeUsernameAndUrl} from "../Store/lists"
 import { Layout } from "../Commons/Layout";
+import { CustomInput } from "../Commons/CustomInput";
 
 const mapStateToProps = (state) =>( {
   userData: state.userSettings
@@ -38,31 +39,20 @@ export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((pr
 
     >
       <DefText weight="medium">username</DefText>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your Name"
-        onChangeText={(v) => handleFieldChange("username", v)}
-      />
+  
+
+      <CustomInput placeholder="Enter your Name"
+        onChangeText={(v) => handleFieldChange("username", v)}/>
 
       <DefText weight="medium">avatar url</DefText>
-      <TextInput
-        style={styles.input}
-        value={userFields.url}
+    
+      <CustomInput value={userFields.url}
         placeholder="Enter avatar url"
-        onChangeText={(v) => handleFieldChange("url", v)}
-      />
+        onChangeText={(v) => handleFieldChange("url", v)}/>
 
       <CustomBtn title="Save Changes"  onPress={saveChangesHandler}/>
       </Layout>
   );
 });
 
-const styles = StyleSheet.create({
 
-  input: {
-    backgroundColor: COLORS.gray,
-    width: 340,
-    padding: 15,
-    borderRadius: 30,
-  },
-});
