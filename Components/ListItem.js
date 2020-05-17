@@ -19,31 +19,40 @@ export const ListItem = connect(null, { toggleItemBought })((props) => {
   const listItemId = props.listItemId;
   const customStyle = props.style;
 
+  const clicked =(id) =>{
+return id
+}
   return (
     <TouchableOpacity
-      style={{ ...styles.container, ...customStyle }}
-      onPress={() => props.toggleItemBought({ listId, listItemId })}
+      onPress={() => {
+        props.toggleItemBought({ listId, listItemId });
+
+      }}
     >
-      {props.editPage ? (
-        <TouchableOpacity onPress={props.editHandler}>
-          <Image source={EditIcon} style={styles.icon} />
-        </TouchableOpacity>
-      ) : null}
+      <View style={{ ...styles.container, ...customStyle }}>
+        {props.editPage ? (
+          <TouchableOpacity onPress={ props.editHandler}>
+            <View style={{ opacity: listItemId === clicked ? 0.5 : 1 }}>
+              <Image source={EditIcon} style={styles.icon} />
+            </View>
+          </TouchableOpacity>
+        ) : null}
 
-      <View style={styles.textArea}>
-        <DefText>{props.listItemName}</DefText>
+        <View style={styles.textArea}>
+          <DefText>{props.listItemName}</DefText>
 
-        <View style={styles.totalCount}>
-          <DefText>x{props.count} </DefText>
-          <DefText>{props.unitName}</DefText>
+          <View style={styles.totalCount}>
+            <DefText>x{props.count} </DefText>
+            <DefText>{props.unitName}</DefText>
+          </View>
         </View>
-      </View>
 
-      {props.editPage ? (
-        <TouchableOpacity onPress={props.deleteHandler}>
-          <Image source={DeleteIcon} style={styles.icon} />
-        </TouchableOpacity>
-      ) : null}
+        {props.editPage ? (
+          <TouchableOpacity onPress={props.deleteHandler}>
+            <Image source={DeleteIcon} style={styles.icon} />
+          </TouchableOpacity>
+        ) : null}
+      </View>
     </TouchableOpacity>
   );
 });

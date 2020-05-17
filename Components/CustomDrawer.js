@@ -13,6 +13,8 @@ const mapStateToProps = (state) => ({
 
 export const CustomDrawer = connect(mapStateToProps)((props) => {
 
+  const url = props.userData.url
+  
   return (
     <View  style={styles.container}>
       <TouchableOpacity style={styles.closeIcon}>
@@ -21,9 +23,9 @@ export const CustomDrawer = connect(mapStateToProps)((props) => {
       <View style={styles.userInfo}>
         <View style={styles.imageWrapper}>
           <Image
-          resizeMode="cover"
+          source = {url === "" ? DefaultAvatarImg : { uri: url}}
           style={styles.userImg}
-          source={{uri: props.userData.url}}
+          
         />
         </View>
         
@@ -88,13 +90,13 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingBottom: 13,
     alignItems: "center",
+    width: 200,
   },
   userImg: {
     width: "100%",
     height: "100%",
     borderRadius: 35,
     
-    overflow: "hidden",
   },
   imageWrapper: {
     width: 73,
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
   },
   
   username: {
-    fontSize: 24,
+    fontSize: 20,
     marginTop: 6,
   },
   drawerLink: {

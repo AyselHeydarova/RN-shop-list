@@ -9,7 +9,6 @@ import { resetBought } from "../Store/lists";
 import { Layout } from "../Commons/Layout";
 import EditIcon from "../assets/Pen.png";
 
-
 const mapStateToProps = (state) => ({
   allLists: state.lists.AllLists,
 });
@@ -36,32 +35,32 @@ export const SingleListStatic = connect(mapStateToProps, { resetBought })(
     );
     const boughtCount = boughtArray.length;
 
-    const listId = props.route.params.listId
+    const listId = props.route.params.listId;
 
     const resetHandler = () => {
-      props.resetBought({listId: listId});
+      props.resetBought({ listId: listId });
     };
 
     return (
-      <Layout  title={props.route.params.listName}
-      source={EditIcon}
-      backBtn={true}
-
-      onPress={() =>
-        props.navigation.navigate("singleEdit")
-      }
-      goBack={() => props.navigation.goBack()}
+      <Layout
+        title={props.route.params.listName}
+        source={EditIcon}
+        backBtn={true}
+        onPress={() => props.navigation.navigate("singleEdit")}
+        goBack={() => props.navigation.goBack()}
       >
-        <View style={styles.row}>
-          <CustomBtn
-            title="Reset"
-            style={{ width: 70, height: 20, fontSize: 10 }}
-            onPress={() => resetHandler()}
-          />
-          <DefText>
-            {boughtCount} / {totalCount}
-          </DefText>
-        </View>
+        {LIST_TYPE === "Regular" ? null : (
+          <View style={styles.row}>
+            <CustomBtn
+              title="Reset"
+              style={{ width: 70, height: 20, fontSize: 10 }}
+              onPress={() => resetHandler()}
+            />
+            <DefText>
+              {boughtCount} / {totalCount}
+            </DefText>
+          </View>
+        )}
 
         <View>
           {chosenListType[index].listItems.map((listItem) => (
@@ -79,7 +78,7 @@ export const SingleListStatic = connect(mapStateToProps, { resetBought })(
             />
           ))}
         </View>
-        </Layout>
+      </Layout>
     );
   }
 );

@@ -35,12 +35,13 @@ export const ListView = connect(null, { deleteList })(
     };
     return (
       <TouchableOpacity
-        style={[styles.container, { opacity: validation ? 0.5 : 1 }]}
+        
         id={listId}
         onPress={() => onPress(listId)}
         onLongPress={() => handleDelete(listId)}
       >
-        <View style={styles.row}>
+        <View style={[styles.container, { opacity: validation ? 0.5 : 1 }]}>
+          <View style={styles.row}>
           <DefText weight="medium" style={styles.text}>
             {listName}
           </DefText>
@@ -57,6 +58,8 @@ export const ListView = connect(null, { deleteList })(
             ]}
           />
         </View>
+        </View>
+        
       </TouchableOpacity>
     );
   }

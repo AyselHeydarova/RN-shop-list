@@ -50,30 +50,39 @@ const CreateList = connect(null, {
 
       <View style={styles.radioWrapper}>
         <TouchableOpacity
-          style={{
-            ...styles.radio,
-            opacity: isOneTimeList ? 1 : 0.5,
-          }}
           onPress={() => {
             listTypeHandler("OneTimeList");
             setIsOneTimeList(true);
           }}
         >
-          <DefText style={styles.radioText} weight="bold">
-            One Time
-          </DefText>
+          <View
+            style={{
+              ...styles.radio,
+              opacity: isOneTimeList ? 1 : 0.5,
+            }}
+          >
+            <DefText style={styles.radioText} weight="bold">
+              One Time
+            </DefText>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={{
-            ...styles.radio,
-            opacity: isOneTimeList ? 0.5 : 1,
+          onPress={() => {
+            listTypeHandler("Regular");
+            setIsOneTimeList(false);
           }}
-          onPress={() => {listTypeHandler("Regular"); setIsOneTimeList(false);}}
         >
-          <DefText style={styles.radioText} weight="bold">
-            Regular
-          </DefText>
+          <View
+            style={{
+              ...styles.radio,
+              opacity: isOneTimeList ? 0.5 : 1,
+            }}
+          >
+            <DefText style={styles.radioText} weight="bold">
+              Regular
+            </DefText>
+          </View>
         </TouchableOpacity>
       </View>
 

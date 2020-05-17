@@ -94,14 +94,12 @@ const SingleListEdit = connect(mapStateToProps, {
     }));
   };
 
-
-   const clickHandler = (index) => {
+  const clickHandler = (index) => {
     const newUnits = [...units];
     newUnits.forEach((unit) => (unit.clicked = false));
     newUnits[index].clicked = true;
     setUnits(newUnits);
   };
-
 
   const unitHandler = (value) => {
     setFields((fields) => ({
@@ -109,9 +107,18 @@ const SingleListEdit = connect(mapStateToProps, {
       unit: value,
     }));
   };
- 
+
   const createListItem = () => {
     props.addListItem(fields);
+    // setFields((fields) => ({
+    //   ...fields,
+    //   name: "",
+    //   count: 0,
+    // }));
+
+    // const newUnits = [...units];
+    // newUnits.forEach((unit) => (unit.clicked = false));
+    // setUnits(newUnits);
   };
 
   const handleDelete = (listItemId) => {
@@ -123,7 +130,6 @@ const SingleListEdit = connect(mapStateToProps, {
       title={props.route.params.listName}
       source={SaveIcon}
       backBtn={true}
-
       onPress={() =>
         props.navigation.navigate("singleStatic", {
           listName: props.route.params.listName,
@@ -160,18 +166,19 @@ const SingleListEdit = connect(mapStateToProps, {
 
       <View style={styles.row}>
         {units.map((unit, index) => (
-          <TouchableOpacity
-            onPress={(unit) => {
-              unitHandler(unit.unit);
-              clickHandler(index);
-            }}
-            style={[styles.count, { opacity: unit.clicked ? 1 : 0.2 }]}
-            key={index}
-          >
-            <DefText weight={unit.clicked ? "bold" : "regular"}>
-              {unit.unit}
-            </DefText>
-          </TouchableOpacity>
+          <View style={[styles.count, { opacity: unit.clicked ? 1 : 0.2 }]}>
+            <TouchableOpacity
+              onPress={(unit) => {
+                unitHandler(unit.unit);
+                clickHandler(index);
+              }}
+              key={index}
+            >
+              <DefText weight={unit.clicked ? "bold" : "regular"}>
+                {unit.unit}
+              </DefText>
+            </TouchableOpacity>
+          </View>
         ))}
       </View>
 

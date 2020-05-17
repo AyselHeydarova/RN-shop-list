@@ -7,8 +7,6 @@ import { connect } from "react-redux";
 import {changeUsernameAndUrl} from "../Store/lists"
 import { Layout } from "../Commons/Layout";
 
-
-
 const mapStateToProps = (state) =>( {
   userData: state.userSettings
 });
@@ -49,6 +47,7 @@ export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((pr
       <DefText weight="medium">avatar url</DefText>
       <TextInput
         style={styles.input}
+        value={userFields.url}
         placeholder="Enter avatar url"
         onChangeText={(v) => handleFieldChange("url", v)}
       />

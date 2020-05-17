@@ -257,7 +257,7 @@ export function listReducer(state = initialState, action) {
 
 const firstState = {
   username: "John sudhaisd",
-  url: "https://image.flaticon.com/icons/svg/2922/2922572.svg",
+  url: "",
 };
 
 export function userReducer(state = firstState, action) {
@@ -265,7 +265,6 @@ export function userReducer(state = firstState, action) {
     case CHANGE_USERNAME_AND_URL: {
       return {
         ...state,
-
         username: action.payload.username,
         url: action.payload.url,
       };
