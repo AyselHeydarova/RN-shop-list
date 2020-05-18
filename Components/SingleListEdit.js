@@ -144,9 +144,10 @@ const SingleListEdit = connect(mapStateToProps, {
         <View style={styles.center}>
           <DefText weight="medium">position name</DefText>
 
-          <CustomInput value={fields.name}
-            onChangeText={(v) => handleFieldChange("name", v)}/>
-         
+          <CustomInput
+            value={fields.name}
+            onChangeText={(v) => handleFieldChange("name", v)}
+          />
         </View>
 
         <View style={styles.center}>
@@ -165,19 +166,18 @@ const SingleListEdit = connect(mapStateToProps, {
       </View>
 
       <View style={styles.row}>
-
-        {units.map((unit, index) => (
-          <View style={[styles.count, { opacity: unit.clicked ? 1 : 0.2 }]}>
+        {units.map((item, index) => (
+          <View style={[styles.count, { opacity: item.clicked ? 1 : 0.2 }]}>
             <TouchableOpacity
-              onPress={(unit) => {
-                unitHandler(unit.unit);
+              onPress={() => {
+                unitHandler(item.unit);
                 clickHandler(index);
-                console.log("clicked")
+                console.log("clicked");
               }}
               key={index}
             >
-              <DefText weight={unit.clicked ? "bold" : "regular"}>
-                {unit.unit}
+              <DefText weight={item.clicked ? "bold" : "regular"}>
+                {item.unit}
               </DefText>
             </TouchableOpacity>
           </View>
