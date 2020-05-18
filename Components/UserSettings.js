@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
-import { COLORS } from "../styles/colors";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { DefText } from "../Commons/DefText";
 import { connect } from "react-redux";
 import {changeUsernameAndUrl} from "../Store/lists"
 import { Layout } from "../Commons/Layout";
 import { CustomInput } from "../Commons/CustomInput";
+import  * as ImagePicker from 'expo-image-picker';
+import  * as Permissions from 'expo-permissions';
+import  * as FileSystem from 'expo-file-system';
 
 const mapStateToProps = (state) =>( {
   userData: state.userSettings
@@ -42,12 +43,14 @@ export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((pr
   
 
       <CustomInput placeholder="Enter your Name"
+                   style={{width: "100%"}}
         onChangeText={(v) => handleFieldChange("username", v)}/>
 
       <DefText weight="medium">avatar url</DefText>
     
       <CustomInput value={userFields.url}
         placeholder="Enter avatar url"
+                   style={{width: "100%"}}
         onChangeText={(v) => handleFieldChange("url", v)}/>
 
       <CustomBtn title="Save Changes"  onPress={saveChangesHandler}/>

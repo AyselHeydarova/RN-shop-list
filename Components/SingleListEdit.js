@@ -33,24 +33,24 @@ const SingleListEdit = connect(mapStateToProps, {
     unit: "kg",
   });
   const [itemEditMode, setItemEditMode] = useState(false);
-  const [clickedListItem, setClickedListItem] =useState("")
+  const [clickedListItem, setClickedListItem] = useState("")
 
   const [units, setUnits] = useState([
-    { unit: "pkg", clicked: false },
-    { unit: "kg", clicked: false },
-    { unit: "litre", clicked: false },
-    { unit: "bott", clicked: false },
+    {unit: "pkg", clicked: false},
+    {unit: "kg", clicked: false},
+    {unit: "litre", clicked: false},
+    {unit: "bott", clicked: false},
   ]);
 
   let LIST_TYPE;
   {
     props.route.params.listType === "OneTime"
-      ? (LIST_TYPE = "OneTimeList")
-      : (LIST_TYPE = "Regular");
+        ? (LIST_TYPE = "OneTimeList")
+        : (LIST_TYPE = "Regular");
   }
 
   const chosenListType = props.allLists.filter(
-    (list) => list.listType === LIST_TYPE
+      (list) => list.listType === LIST_TYPE
   );
 
   const index = chosenListType.findIndex((list) => list.id === fields.listId);
@@ -62,13 +62,13 @@ const SingleListEdit = connect(mapStateToProps, {
     }));
   };
   const indexOfAllLists = props.allLists.findIndex(
-    (list) => list.id === fields.listId
+      (list) => list.id === fields.listId
   );
   const allListItems = props.allLists[indexOfAllLists].listItems;
 
   const handleEdit = (idvalue) => {
     const indexOfListItem = allListItems.findIndex(
-      (listItem) => listItem.id === idvalue
+        (listItem) => listItem.id === idvalue
     );
     setItemEditMode(true);
     setFields((fields) => ({
@@ -77,13 +77,17 @@ const SingleListEdit = connect(mapStateToProps, {
       listItemId: idvalue,
     }));
 
-    setClickedListItem(idvalue)
+    setClickedListItem(idvalue);
   };
-
 
   const updateItem = () => {
     props.updateListItem(fields);
-  };
+    const newUnits = [...units];
+    const selectedUnit = fields.unit;
+    const index =  newUnits.findIndex(unit => unit.unit === selectedUnit);
+    newUnits[index].clicked = true;
+    setUnits(newUnits);
+};
 
   const increment = () => {
     setFields((fields) => ({
@@ -192,12 +196,12 @@ const SingleListEdit = connect(mapStateToProps, {
         <View style={styles.row}>
           <CustomBtn
             title="cancel"
-            style={{ width: 150 }}
+            style={{ width: 150, marginRight: 10 }}
             onPress={() => setItemEditMode(false)}
           />
           <CustomBtn
             title="update"
-            style={{ width: 150 }}
+            style={{ width: 150, marginLeft: 10 }}
             onPress={updateItem}
           />
         </View>
@@ -221,7 +225,7 @@ const SingleListEdit = connect(mapStateToProps, {
             key={listItem.id}
             unitName={listItem.unit}
             count={listItem.count}
-            editHandler={() => {handleEdit(listItem.id)}}
+            editHandler={() => handleEdit(listItem.id)}
             deleteHandler={() => handleDelete(listItem.id)}
           />
         ))}

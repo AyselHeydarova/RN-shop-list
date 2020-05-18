@@ -179,39 +179,26 @@ export function listReducer(state = initialState, action) {
       return indexIsFound ? updatedState : state;
     }
     case UPDATE_LIST_ITEM: {
-      const updatedState = { ...state };
-      updatedState.AllLists = [...updatedState.AllLists];
-      const listIndex = updatedState.AllLists.findIndex(
-        (list) => list.id === action.payload.listId
-      );
-
-      const indexIsFound = listIndex > -1;
-
-      const listItemIndex = updatedState.AllLists[
-        listIndex
-      ].listItems.findIndex(
-        (listItem) => listItem.id === action.payload.listItemId
-      );
-
-      if (indexIsFound) {
-        updatedState.AllLists[listIndex] = {
-          ...updatedState.AllLists[listIndex],
-          listItems: [
-            ...updatedState.AllLists[listIndex].listItems.filter(
-              (listItem) => listItem.id !== action.payload.listItemId
-            ),
-
-            (updatedState.AllLists[listIndex].listItems[listItemIndex] = {
-              id: `${Math.random()}${Date.now()}`,
-              name: action.payload.name,
-              count: action.payload.count,
-              unit: action.payload.unit,
-            }),
-          ],
-        };
-      }
-
-      return indexIsFound ? updatedState : state;
+      return {
+        ...state,
+        AllLists: state.AllLists.map((list) => {
+          if (list.id === action.payload.listId) {
+            return{
+              ...list,
+              listItems: list.listItems.map((listItem) => {
+                if(listItem.id === action.payload.listItemId) {
+                  return {
+                    ...listItem,
+                    name: action.payload.name,
+                    count: action.payload.count,
+                    unit: action.payload.unit,
+                  }
+                } return listItem;
+              })
+            }
+          } return list;
+        })
+      };
     }
     case TOGGLE_ITEM_BOUGHT:
       return {

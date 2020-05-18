@@ -4,7 +4,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  ImagePropTypes,
   StatusBar,
 } from "react-native";
 import { COLORS } from "../styles/colors";
