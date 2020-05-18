@@ -33,6 +33,7 @@ const SingleListEdit = connect(mapStateToProps, {
     unit: "kg",
   });
   const [itemEditMode, setItemEditMode] = useState(false);
+  const [clickedListItem, setClickedListItem] =useState("")
 
   const [units, setUnits] = useState([
     { unit: "pkg", clicked: false },
@@ -75,7 +76,10 @@ const SingleListEdit = connect(mapStateToProps, {
       ...allListItems[indexOfListItem],
       listItemId: idvalue,
     }));
+
+    setClickedListItem(idvalue)
   };
+
 
   const updateItem = () => {
     props.updateListItem(fields);
@@ -212,11 +216,12 @@ const SingleListEdit = connect(mapStateToProps, {
           <ListItem
             listItemName={listItem.name}
             editPage={true}
+            clickedListItemId={clickedListItem}
             listItemId={listItem.id}
             key={listItem.id}
             unitName={listItem.unit}
             count={listItem.count}
-            editHandler={() => handleEdit(listItem.id)}
+            editHandler={() => {handleEdit(listItem.id)}}
             deleteHandler={() => handleDelete(listItem.id)}
           />
         ))}
