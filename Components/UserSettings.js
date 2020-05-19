@@ -1,61 +1,108 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CustomBtn } from "../Commons/CustomBtn";
 import { DefText } from "../Commons/DefText";
 import { connect } from "react-redux";
-import {changeUsernameAndUrl} from "../Store/lists"
+import { changeUsernameAndUrl } from "../Store/lists";
 import { Layout } from "../Commons/Layout";
 import { CustomInput } from "../Commons/CustomInput";
-import  * as ImagePicker from 'expo-image-picker';
-import  * as Permissions from 'expo-permissions';
-import  * as FileSystem from 'expo-file-system';
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import * as FileSystem from "expo-file-system";
+import { Image } from "react-native";
+import Profile from "../assets/profile.png";
+import { COLORS } from "../styles/colors";
 
-const mapStateToProps = (state) =>( {
-  userData: state.userSettings
+const mapStateToProps = (state) => ({
+  userData: state.userSettings,
 });
 
-export const UserSettings = connect(mapStateToProps, {changeUsernameAndUrl})((props) => {
-  const [userFields, setUserFields] = useState({
-    username: "username",
-    url: "",
-  });
-
-  const handleFieldChange = (name, value) => {
-    setUserFields((fields) => ({
-      ...fields,
-      [name]: value,
-    }));
-  };
-
-  const username = userFields.username
-  const url = userFields.url
-
-  const saveChangesHandler=() => {
-    props.changeUsernameAndUrl({username, url})
+const getPermissions = async () => {
+  try {
+    const result = await Permissions.askAsync(
+      Permissions.CAMERA,
+      Permissions.CAMERA_ROLL
+    );
+    console.log(result);
+    if (result.status != "granted") {
+      console.log("Access denied");
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.log("catched error", error);
   }
+};
 
-  return (
-    <Layout
-      title={"User Settings"}
-      backBtn={false}
+export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
+  (props) => {
+    const [userFields, setUserFields] = useState({
+      username: "username",
+      url: "",
+    });
 
-    >
-      <DefText weight="medium">username</DefText>
-  
+    useEffect(() => {
+      getPermissions().then((answer) =>
+        console.log("Permission answer", answer)
+      );
+    }, []);
 
-      <CustomInput placeholder="Enter your Name"
-                   style={{width: "100%"}}
-        onChangeText={(v) => handleFieldChange("username", v)}/>
+    const username = userFields.username;
+    const url = userFields.url;
 
-      <DefText weight="medium">avatar url</DefText>
-    
-      <CustomInput value={userFields.url}
-        placeholder="Enter avatar url"
-                   style={{width: "100%"}}
-        onChangeText={(v) => handleFieldChange("url", v)}/>
+    const takeImageFromGallery = async () => {
+      const image = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+      });
+      setUserFields((fields) => ({
+        ...fields,
+        url: image.uri,
+      }));
+      console.log(image);
+    };
 
-      <CustomBtn title="Save Changes"  onPress={saveChangesHandler}/>
+    const saveChangesHandler = () => {
+      props.changeUsernameAndUrl({ username, url });
+    };
+
+    return (
+      <Layout title={"User Settings"} backBtn={false}>
+        <DefText weight="medium">username</DefText>
+
+        <CustomInput
+          placeholder="Enter your Name"
+          style={{ width: "100%" }}
+          onChangeText={(v) => handleFieldChange("username", v)}
+        />
+
+        {/* <DefText weight="medium">Enter avatar url</DefText>
+
+        <CustomInput
+          value={userFields.url}
+          placeholder="Enter avatar url"
+          style={{ width: "100%" }}
+          onChangeText={(v) => handleFieldChange("url", v)}
+        />
+
+        <DefText weight="medium">or take image from Gallery</DefText> */}
+        <Image
+          source={{ uri: url }}
+          style={{
+            width: 100,
+            height: 100,
+            marginTop: 10,
+            borderWidth: 2,
+            borderColor: COLORS.red,
+            borderRadius: 50,
+          }}
+        />
+        <CustomBtn
+          title="Take image from Gallery"
+          onPress={takeImageFromGallery}
+        />
+        <CustomBtn title="Save Changes" onPress={saveChangesHandler} />
       </Layout>
-  );
-});
-
-
+    );
+  }
+);

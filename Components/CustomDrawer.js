@@ -8,27 +8,27 @@ import { DefText } from "../Commons/DefText";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state) => ({
-  userData: state.userSettings
-})
+  userData: state.userSettings,
+});
 
 export const CustomDrawer = connect(mapStateToProps)((props) => {
+  const url = props.userData.url;
 
-  const url = props.userData.url
-  
+  console.log("drawer url", url);
+
   return (
-    <View  style={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity style={styles.closeIcon}>
         <Image style={styles.closeIconImg} />
       </TouchableOpacity>
       <View style={styles.userInfo}>
         <View style={styles.imageWrapper}>
           <Image
-          source = {url === "" ? DefaultAvatarImg : { uri: url}}
-          style={styles.userImg}
-          
-        />
+            source={url === "" ? DefaultAvatarImg : { uri: url }}
+            style={styles.userImg}
+          />
         </View>
-        
+
         <DefText style={styles.username}>{props.userData.username}</DefText>
       </View>
 
@@ -96,7 +96,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     borderRadius: 35,
-    
   },
   imageWrapper: {
     width: 73,
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderColor: COLORS.red,
   },
-  
+
   username: {
     fontSize: 20,
     marginTop: 6,
