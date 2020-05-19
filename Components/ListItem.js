@@ -19,17 +19,20 @@ export const ListItem = connect(null, { toggleItemBought })((props) => {
   const listItemId = props.listItemId;
   const customStyle = props.style;
 
-   return (
+  return (
     <TouchableOpacity
       onPress={() => {
         props.toggleItemBought({ listId, listItemId });
-
       }}
     >
       <View style={{ ...styles.container, ...customStyle }}>
         {props.editPage ? (
-          <TouchableOpacity  onPress={ props.editHandler}>
-            <View style={{ opacity: listItemId === props.clickedListItemId ? 0.5 : 1 }}>
+          <TouchableOpacity onPress={props.editHandler}>
+            <View
+              style={{
+                opacity: listItemId === props.clickedListItemId ? 0.5 : 1,
+              }}
+            >
               <Image source={EditIcon} style={styles.icon} />
             </View>
           </TouchableOpacity>
