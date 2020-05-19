@@ -49,6 +49,13 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
     const username = userFields.username;
     const url = userFields.url;
 
+    const handleFieldChange = (name, value) => {
+      setUserFields((fields) => ({
+        ...fields,
+        [name]: value,
+      }));
+    };
+
     const takeImageFromGallery = async () => {
       const image = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -60,6 +67,14 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
         url: image.uri,
       }));
       console.log(image);
+    };
+
+    const takePicture = async () => {
+      const image = await ImagePicker.launchCameraAsync();
+      setUserFields((fields) => ({
+        ...fields,
+        url: image.uri,
+      }));
     };
 
     const saveChangesHandler = () => {
@@ -101,6 +116,7 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
           title="Take image from Gallery"
           onPress={takeImageFromGallery}
         />
+        <CustomBtn title="Take Picture" onPress={takePicture} />
         <CustomBtn title="Save Changes" onPress={saveChangesHandler} />
       </Layout>
     );
