@@ -18,47 +18,20 @@ const { Navigator, Screen } = createStackNavigator();
 
 const HomeStack = () => {
   return (
-    <Navigator
-      headerMode="none"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: COLORS.red,
-        },
-        headerTitleStyle: {
-          color: "white",
-          fontSize: 18,
-          fontFamily: "MontserratRegular",
-        },
-      }}
-    >
+    <Navigator headerMode="none">
       <Screen
         name="homePage"
         component={HomePage}
-        options={({ navigation }) => ({
+        options={() => ({
           title: "One Time Lists",
-          headerRight: () => (
-            <IconBtn source={Burger} onPress={() => navigation.openDrawer()} />
-          ),
         })}
       />
 
       <Screen
         name="singleEdit"
         component={SingleListEdit}
-        options={({ route, navigation }) => ({
+        options={({ route }) => ({
           title: route.params.listName,
-          headerRight: () => (
-            <IconBtn
-              source={SaveIcon}
-              onPress={() =>
-                navigation.navigate("singleStatic", {
-                  listName: route.params.listName,
-                  listId: route.params.listId,
-                  listType: route.params.listType,
-                })
-              }
-            />
-          ),
         })}
       />
 
@@ -67,7 +40,6 @@ const HomeStack = () => {
         component={SingleListStatic}
         options={({ route }) => ({
           title: route.params.listName,
-          headerRight: () => <IconBtn source={EditIcon} />,
         })}
       />
 

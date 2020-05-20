@@ -183,21 +183,23 @@ export function listReducer(state = initialState, action) {
         ...state,
         AllLists: state.AllLists.map((list) => {
           if (list.id === action.payload.listId) {
-            return{
+            return {
               ...list,
               listItems: list.listItems.map((listItem) => {
-                if(listItem.id === action.payload.listItemId) {
+                if (listItem.id === action.payload.listItemId) {
                   return {
                     ...listItem,
                     name: action.payload.name,
                     count: action.payload.count,
                     unit: action.payload.unit,
-                  }
-                } return listItem;
-              })
-            }
-          } return list;
-        })
+                  };
+                }
+                return listItem;
+              }),
+            };
+          }
+          return list;
+        }),
       };
     }
     case TOGGLE_ITEM_BOUGHT:
@@ -243,7 +245,7 @@ export function listReducer(state = initialState, action) {
 }
 
 const firstState = {
-  username: "John sudhaisd",
+  username: "John Smith",
   url: "",
 };
 

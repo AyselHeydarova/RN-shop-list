@@ -9,7 +9,6 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
 import { Image } from "react-native";
-import Profile from "../assets/profile.png";
 import { COLORS } from "../styles/colors";
 
 const mapStateToProps = (state) => ({
@@ -22,7 +21,7 @@ const getPermissions = async () => {
       Permissions.CAMERA,
       Permissions.CAMERA_ROLL
     );
-    console.log(result);
+
     if (result.status != "granted") {
       console.log("Access denied");
       return false;
@@ -62,11 +61,22 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
         allowsEditing: true,
         aspect: [1, 1],
       });
+
+      const newPath = `${FileSystem.documentDirectory}${image.uri
+        .split("/")
+        .pop()}`;
+
+      const result = await FileSystem.moveAsync({
+        from: image.uri,
+        to: newPath,
+      });
+
+      image.uri = newPath;
+
       setUserFields((fields) => ({
         ...fields,
         url: image.uri,
       }));
-      console.log(image);
     };
 
     const takePicture = async () => {
