@@ -1,9 +1,15 @@
 import React from "react";
-import { StyleSheet, Dimensions, TouchableOpacity, View, Alert } from "react-native";
-import { DefText } from "../Commons/DefText";
-import { COLORS } from "../styles/colors";
+import {
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  View,
+  Alert,
+} from "react-native";
+import { DefText } from "../../Commons/DefText";
+import { COLORS } from "../../styles/colors";
 import { connect } from "react-redux";
-import { deleteList } from "../Store/lists";
+import { deleteList } from "../../Store/lists";
 
 export const ListView = connect(null, { deleteList })(
   ({
@@ -26,40 +32,40 @@ export const ListView = connect(null, { deleteList })(
           {
             text: "Cancel",
             onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
+            style: "cancel",
           },
-          { text: "Yes, Delete Please", onPress: () => deleteList({listId}) }
+          { text: "Yes, Delete Please", onPress: () => deleteList({ listId }) },
         ],
         { cancelable: false }
       );
     };
     return (
       <TouchableOpacity
-        
         id={listId}
         onPress={() => onPress(listId)}
         onLongPress={() => handleDelete(listId)}
       >
         <View style={[styles.container, { opacity: validation ? 0.5 : 1 }]}>
           <View style={styles.row}>
-          <DefText weight="medium" style={styles.text}>
-            {listName}
-          </DefText>
-          <DefText weight="medium">
-            {boughtCount} / {listItemsLength}
-          </DefText>
-        </View>
+            <DefText weight="medium" style={styles.text}>
+              {listName}
+            </DefText>
+            <DefText weight="medium">
+              {boughtCount} / {listItemsLength}
+            </DefText>
+          </View>
 
-        <View style={styles.progressWrapper}>
-          <View
-            style={[
-              styles.progress,
-              progressPercentage ? { width: `${progressPercentage} %` } : null,
-            ]}
-          />
+          <View style={styles.progressWrapper}>
+            <View
+              style={[
+                styles.progress,
+                progressPercentage
+                  ? { width: `${progressPercentage} %` }
+                  : null,
+              ]}
+            />
+          </View>
         </View>
-        </View>
-        
       </TouchableOpacity>
     );
   }

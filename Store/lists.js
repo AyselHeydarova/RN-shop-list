@@ -1,3 +1,8 @@
+import { LIST_TYPES } from "../utilities/listTypes";
+
+export const MODULE_NAME = "lists";
+export const selectListByType = (state, type) => state[MODULE_NAME][type];
+
 // Actions
 export const CREATE_LIST = "CREATE_LIST";
 

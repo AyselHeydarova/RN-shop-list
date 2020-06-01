@@ -7,7 +7,7 @@ import {
   StatusBar,
 } from "react-native";
 import { COLORS } from "../styles/colors";
-import { DefText } from "./DefText";
+import { DefText } from "../Components/DefText";
 import { IconBtn } from "../Components/IconBtn";
 import BackBtn from "../assets/Back.png";
 

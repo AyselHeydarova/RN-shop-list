@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { COLORS } from "../styles/colors";
-import { DefText } from "../Commons/DefText";
+import { DefText } from "./DefText";
 
 export const CustomBtn = ({ title, onPress, style }) => {
   return (

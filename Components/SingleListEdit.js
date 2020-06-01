@@ -7,15 +7,15 @@ import {
   Dimensions,
 } from "react-native";
 import { COLORS } from "../styles/colors";
-import { DefText } from "../Commons/DefText";
-import { CustomBtn } from "../Commons/CustomBtn";
+import { DefText } from "./DefText";
+import { CustomBtn } from "./CustomBtn";
 import { ListItem } from "../Components/ListItem";
 
 import { addListItem, deleteListItem, updateListItem } from "../Store/lists";
 import { connect } from "react-redux";
 import { Layout } from "../Commons/Layout";
 import SaveIcon from "../assets/Save.png";
-import { CustomInput } from "../Commons/CustomInput";
+import { CustomInput } from "./CustomInput";
 
 const mapStateToProps = (state) => ({
   allLists: state.lists.AllLists,

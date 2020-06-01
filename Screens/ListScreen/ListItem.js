@@ -7,11 +7,11 @@ import {
   Image,
 } from "react-native";
 
-import { DefText } from "../Commons/DefText";
+import { DefText } from "../../Commons/DefText";
 import DeleteIcon from "../assets/delete.png";
 import EditIcon from "../assets/edit.png";
-import { COLORS } from "../styles/colors";
-import { toggleItemBought } from "../Store/lists";
+import { COLORS } from "../../styles/colors";
+import { toggleItemBought } from "../../Store/lists";
 import { connect } from "react-redux";
 
 export const ListItem = connect(null, { toggleItemBought })((props) => {
