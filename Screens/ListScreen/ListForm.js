@@ -1,81 +1,158 @@
-import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Alert } from "react-native";
 
-const COUNT_TYPES = ["pkg", "kg", "litre", "bott"];
+import { CountField } from "../../Components/CountField";
+import { RadioGroup } from "../../Components/RadioGroup";
+import { getEqualWidth } from "../../utilities/getEqualWidth";
+import { COLORS } from "../../styles/colors";
+import { set } from "react-native-reanimated";
 
-export const ListForm = () => {
-  const [fields, setFields] = useState({
-    name: "",
-    count: 0,
-    countType: "pkg",
-  });
+const UNITS = ["pkg", "kg", "litre", "bott"];
+
+const fieldsInitialState = {
+  name: "",
+  count: 1,
+  unit: UNITS[0],
+};
+
+export const ListForm = ({
+  onCreateSubmit,
+  singleProductEditState,
+  onProductUpdateSubmit,
+  onProductUpdateCancel,
+}) => {
+  const [fields, setFields] = useState(fieldsInitialState);
+
+  useEffect(() => {
+    if (singleProductEditState.status) {
+      setFields(singleProductEditState.product);
+    }
+  }, [singleProductEditState]);
+
+  const handleFieldChange = (name, value) => {
+    setFields((fields) => ({
+      ...fields,
+      [name]: value,
+    }));
+  };
+
+  const resetForm = () => setFields(fieldsInitialState);
+
+  const validateForm = () => {
+    if (fields.name.trim() === "") {
+      Alert.alert("Enter product name", "name is required");
+      return false;
+    } else if (fields.count < 1) {
+      Alert.alert("Invalid count", "Enter count bigger than 0");
+      return false;
+    }
+    return true;
+  };
+
+  const handleEdit = (idvalue) => {
+    const indexOfListItem = allListItems.findIndex(
+      (listItem) => listItem.id === idvalue
+    );
+    setItemEditMode(true);
+    setFields((fields) => ({
+      ...fields,
+      ...allListItems[indexOfListItem],
+      listItemId: idvalue,
+    }));
+
+    setClickedListItem(idvalue);
+  };
+
+  const updateItem = () => {
+    if (validateForm()) {
+      onProductUpdateSubmit(fiedls);
+      resetForm();
+    }
+  };
+
+  const updateCancel = () => {
+    onProductUpdateCancel();
+    resetForm();
+  };
+
+  const createListItem = () => {
+    if (validateForm()) {
+      onCreateSubmit(fields);
+      resetForm();
+    }
+  };
 
   return (
-    <View style={styles.row}>
-    <View style={styles.center}>
-      <DefText weight="medium">position name</DefText>
-
-      <CustomInput
-        value={fields.name}
-        onChangeText={(v) => handleFieldChange("name", v)}
-      />
-    </View>
-
-    <View style={styles.center}>
-      <DefText weight="medium">count</DefText>
-      <View style={styles.count}>
-        <TouchableOpacity onPress={decrement}>
-          <DefText weight="bold">-</DefText>
-        </TouchableOpacity>
-        <DefText weight="bold">{fields.count}</DefText>
-
-        <TouchableOpacity onPress={increment}>
-          <DefText weight="bold">+</DefText>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.row}>
+        <CustomInput
+          value={fields.name}
+          label="position name"
+          style={styles.name}
+          onChangeText={(v) => handleFieldChange("name", v)}
+        />
+        <CountField
+          value={fields.count}
+          label="count"
+          onChangeText={(v) => handleFieldChange("count", v)}
+          style={styles.count}
+        />
       </View>
-    </View>
-  </View>
 
-  <View style={styles.row}>
-    {units.map((item, index) => (
-      <View style={[styles.count, { opacity: item.clicked ? 1 : 0.2 }]}>
-        <TouchableOpacity
-          onPress={() => {
-            unitHandler(item.unit);
-            clickHandler(index);
-            console.log("clicked");
-          }}
-          key={index}
-        >
-          <DefText weight={item.clicked ? "bold" : "regular"}>
-            {item.unit}
-          </DefText>
-        </TouchableOpacity>
+      <View style={styles.unitsWrapper}>
+        <RadioGroup
+          value={fields.unit}
+          onValueChange={(v) => handleFieldChange("unit", v)}
+          options={UNITS}
+        />
       </View>
-    ))}
-  </View>
 
-  {itemEditMode ? (
-    <View style={styles.row}>
-      <CustomBtn
-        title="cancel"
-        style={{ width: 150, marginRight: 10 }}
-        onPress={() => setItemEditMode(false)}
-      />
-      <CustomBtn
-        title="update"
-        style={{ width: 150, marginLeft: 10 }}
-        onPress={updateItem}
-      />
+      {singleProductEditState.status ? (
+        <View style={styles.row}>
+          <CustomBtn
+            title="cancel"
+            style={styles.cancel}
+            width={getEqualWidth(2)}
+            onPress={updateCancel}
+          />
+          <CustomBtn
+            title="update"
+            width={getEqualWidth(2)}
+            onPress={updateItem}
+          />
+        </View>
+      ) : (
+        <CustomBtn title="Add to list" onPress={createListItem} />
+      )}
     </View>
-  ) : (
-    <CustomBtn
-      title="Add to list"
-      style={{ width: 340 }}
-      onPress={createListItem}
-    />
-  )}
-
-  <View style={styles.line} />
-  )
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    paddingHorizontal: 16,
+    paddingBottom: 21,
+    borderBottomColor: COLORS.BG_SECONDARY,
+    borderBottomWidth: 2,
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  name: {
+    width: getEqualWidth(2) * (3 / 2),
+  },
+
+  count: {
+    width: getEqualWidth(2) * (1 / 2),
+  },
+
+  unitsWrapper: {
+    marginTop: 14,
+    marginBottom: 14,
+  },
+  cancel: {
+    opacity: 0.6,
+  },
+});

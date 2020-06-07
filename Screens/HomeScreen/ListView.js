@@ -4,46 +4,29 @@ import {
   Dimensions,
   TouchableOpacity,
   View,
-  Alert,
+  
 } from "react-native";
 import { DefText } from "../../Commons/DefText";
 import { COLORS } from "../../styles/colors";
-import { connect } from "react-redux";
-import { deleteList } from "../../Store/lists";
+import { LIST_TYPES } from "../../utilities/listTypes";
 
-export const ListView = connect(null, { deleteList })(
+export const ListView = 
   ({
     listName,
     listItemsLength,
     onPress,
-    listId,
+    onLongPress,
     boughtCount,
-    listType,
-    deleteList,
+    
   }) => {
     const progressPercentage = (boughtCount / listItemsLength) * 100;
 
-    const validation = listType === "OneTime" && progressPercentage === 100;
-    const handleDelete = (listId) => {
-      Alert.alert(
-        "Confirm Delete",
-        "Are you sure to delete?",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel",
-          },
-          { text: "Yes, Delete Please", onPress: () => deleteList({ listId }) },
-        ],
-        { cancelable: false }
-      );
-    };
+    const validation = listType === LIST_TYPES.ONETIME && progressPercentage === 100;
+    
     return (
       <TouchableOpacity
-        id={listId}
-        onPress={() => onPress(listId)}
-        onLongPress={() => handleDelete(listId)}
+        onPress={onPress}
+        onLongPress={onLongPress}
       >
         <View style={[styles.container, { opacity: validation ? 0.5 : 1 }]}>
           <View style={styles.row}>
@@ -68,8 +51,7 @@ export const ListView = connect(null, { deleteList })(
         </View>
       </TouchableOpacity>
     );
-  }
-);
+  };
 
 const styles = StyleSheet.create({
   container: {

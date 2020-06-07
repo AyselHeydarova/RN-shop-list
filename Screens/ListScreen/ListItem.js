@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  Alert,
 } from "react-native";
 
 import { DefText } from "../../Commons/DefText";
@@ -14,77 +15,121 @@ import { COLORS } from "../../styles/colors";
 import { toggleItemBought } from "../../Store/lists";
 import { connect } from "react-redux";
 
-export const ListItem = connect(null, { toggleItemBought })((props) => {
-  const listId = props.listId;
-  const listItemId = props.listItemId;
-  const customStyle = props.style;
+export const ListItem = ({
+  product,
+  isEditMode,
+  isCurrentInEdit,
+  onLongPress,
+  onDeletePress,
+  onEditPress,
+}) => {
+  const { name, count, unit, Bought } = product;
+
+  const onDeleteHandler = () => {
+    Alert.alert("Delete this product?", "Are you sure?", [
+      { text: "No", style: "cancel" },
+      { text: "Yes, delete", onPress: onDeletePress },
+    ]);
+  };
 
   return (
     <TouchableOpacity
-      onPress={() => {
-        props.toggleItemBought({ listId, listItemId });
-      }}
+      style={styles.container}
+      disabled={isEditMode}
+      onLongPress={onLongPress}
     >
-      <View style={{ ...styles.container, ...customStyle }}>
-        {props.editPage ? (
-          <TouchableOpacity onPress={props.editHandler}>
-            <View
-              style={{
-                opacity: listItemId === props.clickedListItemId ? 0.5 : 1,
-              }}
+      <View
+        style={[
+          styles.wrapper,
+          {
+            opacity: !isEditMode && Bought ? 0.5 : 1,
+            paddingHorizontal: isEditMode ? 55 : 20,
+          },
+        ]}
+      >
+        <DefText weight="medium" style={styles.title}>
+          {name}
+        </DefText>
+
+        <DefText weight="medium" style={styles.title}>
+          x{count} {unit}
+        </DefText>
+
+        {isEditMode ? (
+          <>
+            <TouchableOpacity
+              onPress={onEditPress}
+              style={styles.editBtnWrapper}
+              disabled={isCurrentInEdit}
             >
-              <Image source={EditIcon} style={styles.icon} />
-            </View>
-          </TouchableOpacity>
-        ) : null}
+              <View
+                style={[
+                  styles.btn,
+                  styles.btnEdit,
+                  { opacity: isCurrentInEdit ? 0.5 : 1 },
+                ]}
+              >
+                <Image source={EditIcon} style={styles.icon} />
+              </View>
+            </TouchableOpacity>
 
-        <View style={styles.textArea}>
-          <DefText>{props.listItemName}</DefText>
-
-          <View style={styles.totalCount}>
-            <DefText>x{props.count} </DefText>
-            <DefText>{props.unitName}</DefText>
-          </View>
-        </View>
-
-        {props.editPage ? (
-          <TouchableOpacity onPress={props.deleteHandler}>
-            <Image source={DeleteIcon} style={styles.icon} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={onDeleteHandler}
+              style={[styles.btn, styles.btnDelete]}
+            >
+              <Image source={DeleteIcon} style={styles.icon} />
+            </TouchableOpacity>
+          </>
         ) : null}
       </View>
     </TouchableOpacity>
   );
-});
+};
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
+    marginBottom: 15,
+  },
+  wrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     height: 40,
-    width: Dimensions.get("window").width - 30,
-    borderRadius: 30,
-    borderColor: COLORS.yellow,
+    borderRadius: 20,
+    borderColor: COLORS.SECONDARY,
     borderWidth: 2,
-    marginBottom: 15,
-  },
-  textArea: {
-    width: Dimensions.get("window").width - 120,
-    paddingHorizontal: 10,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
   },
 
-  totalCount: {
-    flexDirection: "row",
+  btn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    padding: 10,
+    backgroundColor: COLORS.BG_SECONDARY,
+    position: "absolute",
+    top: -2,
+    zIndex: 2,
   },
 
   icon: {
-    width: 44,
-    height: 44,
+    width: "100%",
+    height: "100%",
+  },
+
+  editBtnWrapper: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: 40,
+    height: 40,
+  },
+  btnEdit: {
+    backgroundColor: COLORS.SECONDARY,
+    left: -2,
+  },
+
+  btnDelete: {
+    backgroundColor: COLORS.BG_PRIMARY,
+    right: -2,
   },
 });

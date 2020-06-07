@@ -1,15 +1,17 @@
 import { LIST_TYPES } from "../utilities/listTypes";
+import { genID } from "../utilities/genID";
+import { SET_APP_DATA } from "../utilities/dataStorage";
 
+// SELECTORS
 export const MODULE_NAME = "lists";
 export const selectListByType = (state, type) => state[MODULE_NAME][type];
-
+export const selectSingleListByID = (state, type, ID) =>
+  selectListByType(state, type).find((list) => list.id === ID);
 // Actions
 export const CREATE_LIST = "CREATE_LIST";
-
-export const CHANGE_USERNAME_AND_URL = "CHANGE_USERNAME_AND_URL";
+export const DELETE_LIST = "DELETE_LIST";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
 export const DELETE_LIST_ITEM = "DELETE_LIST_ITEM";
-export const DELETE_LIST = "DELETE_LIST";
 export const UPDATE_LIST_ITEM = "UPDATE_LIST_ITEM";
 export const TOGGLE_ITEM_BOUGHT = "TOGGLE_ITEM_BOUGHT";
 export const RESET_BOUGHT = "RESET_BOUGHT";
@@ -18,16 +20,6 @@ export const RESET_BOUGHT = "RESET_BOUGHT";
 
 export const createList = (payload) => ({
   type: CREATE_LIST,
-  payload,
-});
-
-export const changeUsernameAndUrl = (payload) => ({
-  type: CHANGE_USERNAME_AND_URL,
-  payload,
-});
-
-export const changeUrl = (payload) => ({
-  type: CHANGE_URL,
   payload,
 });
 
@@ -64,88 +56,58 @@ export const resetBought = (payload) => ({
 // Reducers
 
 const initialState = {
-  AllLists: [
-    {
-      id: `${Math.random()}${Date.now()}`,
-      name: "Default One Time List",
-      listType: "OneTimeList",
-      listItems: [
-        {
-          id: `${Math.random()}${Date.now()}`,
-          name: "List Item example",
-          count: 0,
-          unit: "kg",
-          bought: false,
-        },
-        {
-          id: `${Math.random()}${Date.now()}`,
-          name: "List Item example",
-          count: 0,
-          unit: "kg",
-          bought: false,
-        },
-        {
-          id: `${Math.random()}${Date.now()}`,
-          name: "List Item example",
-          count: 0,
-          unit: "kg",
-          bought: false,
-        },
-      ],
-    },
-    {
-      id: `${Math.random()}${Date.now()}`,
-      name: "Default Regular List",
-      listType: "Regular",
-      listItems: [
-        {
-          id: `${Math.random()}${Date.now()}`,
-          name: "Regular List Item example",
-          count: 2,
-          unit: "kg",
-          bought: false,
-        },
-      ],
-    },
-  ],
+  [LIST_TYPES.ONETIME]: [],
+  [LIST_TYPES.REGULAR]: [],
 };
 
-export function listReducer(state = initialState, action) {
-  switch (action.type) {
+export function listReducer(state = initialState, { type, payload }) {
+  switch (type) {
+    case SET_APP_DATA:
+      return {
+        ...state,
+        ...payload.lists,
+      };
     case CREATE_LIST: {
       return {
         ...state,
-        AllLists: [
-          ...state.AllLists,
+        [payload.listType]: [
           {
-            id: `${Math.random()}${Date.now()}`,
-            name: action.payload.name,
-            listType: action.payload.listType,
+            id: payload.listId,
+            name: payload.name,
             listItems: [],
           },
+          ...state[payload.listType],
         ],
       };
     }
 
+    case DELETE_LIST: {
+      return {
+        ...state,
+        [payload.listType]: state[payload.listType].filter((list) => {
+          return list.id !== payload.listId;
+        }),
+      };
+    }
     case ADD_LIST_ITEM: {
       const updatedState = { ...state };
-      updatedState.AllLists = [...updatedState.AllLists];
-      const listIndex = updatedState.AllLists.findIndex(
-        (list) => list.id === action.payload.listId
+      updatedState[payload.listType] = [...updatedState[payload.listType]];
+      const listIndex = updatedState[payload.listType].findIndex(
+        (list) => list.id === payload.listId
       );
 
       const indexIsFound = listIndex > -1;
       if (indexIsFound) {
-        updatedState.AllLists[listIndex] = {
-          ...updatedState.AllLists[listIndex],
+        updatedState[payload.listType][listIndex] = {
+          ...updatedState[payload.listType][listIndex],
 
           listItems: [
-            ...updatedState.AllLists[listIndex].listItems,
+            ...updatedState[payload.listType][listIndex].listItems,
             {
-              id: `${Math.random()}${Date.now()}`,
-              name: action.payload.name,
-              count: action.payload.count,
-              unit: action.payload.unit,
+              id: genID(),
+              name: payload.name,
+              count: payload.count,
+              unit: payload.unit,
             },
           ],
         };
@@ -153,30 +115,22 @@ export function listReducer(state = initialState, action) {
 
       return indexIsFound ? updatedState : state;
     }
-    case DELETE_LIST: {
-      return {
-        ...state,
-        AllLists: state.AllLists.filter((list) => {
-          return list.id !== action.payload.listId;
-        }),
-      };
-    }
 
     case DELETE_LIST_ITEM: {
       const updatedState = { ...state };
-      updatedState.AllLists = [...updatedState.AllLists];
-      const listIndex = updatedState.AllLists.findIndex(
-        (list) => list.id === action.payload.listId
+      updatedState[payload.listType] = [...updatedState[payload.listType]];
+      const listIndex = updatedState[payload.listType].findIndex(
+        (list) => list.id === payload.listId
       );
 
       const indexIsFound = listIndex > -1;
 
       if (indexIsFound) {
-        updatedState.AllLists[listIndex] = {
-          ...updatedState.AllLists[listIndex],
+        updatedState[payload.listType][listIndex] = {
+          ...updatedState[payload.listType][listIndex],
           listItems: [
-            ...updatedState.AllLists[listIndex].listItems.filter(
-              (listItem) => listItem.id !== action.payload.listItemId
+            ...updatedState[payload.listType][listIndex].listItems.filter(
+              (listItem) => listItem.id !== payload.listItemId
             ),
           ],
         };
@@ -186,17 +140,17 @@ export function listReducer(state = initialState, action) {
     case UPDATE_LIST_ITEM: {
       return {
         ...state,
-        AllLists: state.AllLists.map((list) => {
-          if (list.id === action.payload.listId) {
+        [payload.listType]: state[payload.listType].map((list) => {
+          if (list.id === payload.listId) {
             return {
               ...list,
               listItems: list.listItems.map((listItem) => {
-                if (listItem.id === action.payload.listItemId) {
+                if (listItem.id === payload.listItemId) {
                   return {
                     ...listItem,
-                    name: action.payload.name,
-                    count: action.payload.count,
-                    unit: action.payload.unit,
+                    name: payload.name,
+                    count: payload.count,
+                    unit: payload.unit,
                   };
                 }
                 return listItem;
@@ -210,12 +164,12 @@ export function listReducer(state = initialState, action) {
     case TOGGLE_ITEM_BOUGHT:
       return {
         ...state,
-        AllLists: state.AllLists.map((list) => {
-          if (list.id === action.payload.listId) {
+        [payload.listType]: state[payload.listType].map((list) => {
+          if (list.id === payload.listId) {
             return {
               ...list,
               listItems: list.listItems.map((listItem) => {
-                if (listItem.id === action.payload.listItemId) {
+                if (listItem.id === payload.listItemId) {
                   return {
                     ...listItem,
                     bought: !listItem.bought,
@@ -231,8 +185,8 @@ export function listReducer(state = initialState, action) {
     case RESET_BOUGHT:
       return {
         ...state,
-        AllLists: state.AllLists.map((list) => {
-          if (list.id === action.payload.listId) {
+        [payload.listType]: state[payload.listType].map((list) => {
+          if (list.id === payload.listId) {
             return {
               ...list,
               listItems: list.listItems.map((listItem) => {
@@ -244,25 +198,6 @@ export function listReducer(state = initialState, action) {
         }),
       };
 
-    default:
-      return state;
-  }
-}
-
-const firstState = {
-  username: "John Smith",
-  url: "",
-};
-
-export function userReducer(state = firstState, action) {
-  switch (action.type) {
-    case CHANGE_USERNAME_AND_URL: {
-      return {
-        ...state,
-        username: action.payload.username,
-        url: action.payload.url,
-      };
-    }
     default:
       return state;
   }

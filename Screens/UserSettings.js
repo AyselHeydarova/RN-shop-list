@@ -11,10 +11,6 @@ import * as FileSystem from "expo-file-system";
 import { Image } from "react-native";
 import { COLORS } from "../styles/colors";
 
-const mapStateToProps = (state) => ({
-  userData: state.userSettings,
-});
-
 const getPermissions = async () => {
   try {
     const result = await Permissions.askAsync(
@@ -36,7 +32,7 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
   (props) => {
     const [userFields, setUserFields] = useState({
       username: "username",
-      url: "",
+      userAvatar: "",
     });
 
     useEffect(() => {
@@ -97,7 +93,7 @@ export const UserSettings = connect(mapStateToProps, { changeUsernameAndUrl })(
 
         <CustomInput
           placeholder="Enter your Name"
-          style={{ width: "100%" }}
+          value={userFields.username}
           onChangeText={(v) => handleFieldChange("username", v)}
         />
 
