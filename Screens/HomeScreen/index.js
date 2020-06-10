@@ -5,15 +5,16 @@ import { connect } from "react-redux";
 import { ListView } from "../Components/ListView";
 import Burger from "../assets/burger.png";
 import { Layout } from "../../Commons/Layout";
-import { selectListByType } from "../../Store/lists";
-import { LIST_TYPES, getListTypeFromParams } from "../../utilities/listTypes";
+import { selectListByType, deleteList } from "../../Store/lists";
+import { getListTypeFromParams } from "../../utilities/listTypes";
+import { GLOBAL_STYLES } from "../../styles/globalStyles";
 
 const mapStateToProps = (state, { route }) => ({
   coversList: selectListByType(state, getListTypeFromParams(route)),
 });
 
-export const HomeScreen = connect(mapStateToProps)(
-  ({ route, navigation, coversList }) => {
+export const HomeScreen = connect(mapStateToProps, { deleteList })(
+  ({ route, navigation, coversList, deleteList }) => {
     const listType = getListTypeFromParams(route);
 
     const handleDelete = (listName, listId) => {
@@ -53,12 +54,13 @@ export const HomeScreen = connect(mapStateToProps)(
               }
               onPress={() =>
                 navigation.navigate("listScreen", {
-                  listID: list.id,
+                  listId: list.id,
                   isEditMode: false,
                   listType,
-                  title: list.title,
+                  listName: list.title,
                 })
               }
+              listType={listType}
               onLongPress={() => handleDelete(list.title, list.id)}
             />
           )}
@@ -70,7 +72,6 @@ export const HomeScreen = connect(mapStateToProps)(
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
+    paddingHorizontal: GLOBAL_STYLES.PADDING,
   },
 });

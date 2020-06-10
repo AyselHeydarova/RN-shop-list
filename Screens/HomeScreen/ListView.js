@@ -1,90 +1,82 @@
 import React from "react";
-import {
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  View,
-  
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
 import { DefText } from "../../Commons/DefText";
 import { COLORS } from "../../styles/colors";
 import { LIST_TYPES } from "../../utilities/listTypes";
 
-export const ListView = 
-  ({
-    listName,
-    listItemsLength,
-    onPress,
-    onLongPress,
-    boughtCount,
-    
-  }) => {
-    const progressPercentage = (boughtCount / listItemsLength) * 100;
+export const ListView = ({
+  listName,
+  listItemsLength,
+  listType,
+  onPress,
+  onLongPress,
+  boughtCount,
+}) => {
+  const progressPercentage = (boughtCount / listItemsLength) * 100;
 
-    const validation = listType === LIST_TYPES.ONETIME && progressPercentage === 100;
-    
-    return (
-      <TouchableOpacity
-        onPress={onPress}
-        onLongPress={onLongPress}
-      >
-        <View style={[styles.container, { opacity: validation ? 0.5 : 1 }]}>
-          <View style={styles.row}>
-            <DefText weight="medium" style={styles.text}>
-              {listName}
-            </DefText>
-            <DefText weight="medium">
-              {boughtCount} / {listItemsLength}
-            </DefText>
-          </View>
+  const validation =
+    listType === LIST_TYPES.ONETIME && progressPercentage === 100;
 
-          <View style={styles.progressWrapper}>
-            <View
-              style={[
-                styles.progress,
-                progressPercentage
-                  ? { width: `${progressPercentage} %` }
-                  : null,
-              ]}
-            />
-          </View>
+  return (
+    <TouchableOpacity onPress={onPress} onLongPress={onLongPress}>
+      <View style={[styles.container, { opacity: validation ? 0.5 : 1 }]}>
+        <View style={styles.row}>
+          <DefText weight="semi" style={styles.text}>
+            {listName}
+          </DefText>
+          <DefText weight="semi" style={styles.progressInNums}>
+            {boughtCount} / {listItemsLength}
+          </DefText>
         </View>
-      </TouchableOpacity>
-    );
-  };
+
+        <View style={styles.progressWrapper}>
+          <View
+            style={[
+              styles.progress,
+              progressPercentage ? { width: `${progressPercentage} %` } : null,
+            ]}
+          />
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    height: 75,
-    width: Dimensions.get("window").width - 40,
     borderRadius: 10,
-    borderColor: COLORS.yellow,
+    borderColor: COLORS.SECONDARY,
     borderWidth: 2,
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginBottom: 15,
+    paddingTop: 11,
+    paddingBottom: 15,
+    marginBottom: 13,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
   },
 
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-end",
   },
 
   progressWrapper: {
-    width: "100%",
-    height: 20,
-    backgroundColor: COLORS.gray,
-    borderRadius: 10,
-    marginTop: 5,
+    height: 19,
+    backgroundColor: COLORS.BG_SECONDARY,
+    borderRadius: 20,
+    marginTop: 8,
   },
 
   progress: {
-    height: 20,
-    width: 0,
-    backgroundColor: COLORS.yellow,
-    borderRadius: 10,
+    height: 19,
+    backgroundColor: COLORS.PRIMARY,
+    borderRadius: 20,
+  },
+
+  progressInNums: {
+    fontSize: 12,
   },
 });

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TextInput, Alert } from "react-native";
-import { COLORS } from "../styles/colors";
-import { CustomBtn } from "../Commons/CustomBtn";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { createList } from "../Store/lists";
+import { StyleSheet, Alert } from "react-native";
 import { connect } from "react-redux";
+
+import { CustomBtn } from "../Commons/CustomBtn";
+import { createList } from "../Store/lists";
 import { Layout } from "../Commons/Layout";
 import { CustomInput } from "../Commons/CustomInput";
 import { LIST_TYPES } from "../utilities/listTypes";
 import { GLOBAL_STYLES } from "../styles";
+import { genID } from "../utilities/genID";
 
 const createFieldsInitialState = {
   name: "",
@@ -32,25 +32,16 @@ export const CreateList = connect(null, {
       Alert.alert("Enter list name", "It is required");
       return;
     }
-
-    props.createList({ name, listType });
-
-    if (listType === "Regular") {
-      props.navigation.navigate("regular");
-    } else {
-      props.navigation.navigate("homePage");
-    }
+    const listId = genID();
+    await createList({ ...listFields, listId });
+    navigation.navigate("List", {
+      listName: listFields.name,
+      listType: listFields.listType,
+      isEditMode: true,
+      listId,
+    });
+    setListFields(createFieldsInitialState);
   };
-
-  const listNameHandler = (v) => {
-    setListFields((fields) => ({ ...fields, name: v }));
-  };
-
-  const listTypeHandler = (type) => {
-    setIsOneTimeList(true);
-    setListFields((fields) => ({ ...fields, listType: type }));
-  };
-
   return (
     <Layout title={"New List"} backBtn={false}>
       <CustomInput

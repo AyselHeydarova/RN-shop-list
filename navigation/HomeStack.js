@@ -14,14 +14,17 @@ import SaveIcon from "../assets/Save.png";
 import EditIcon from "../assets/Pen.png";
 import Burger from "../assets/burger.png";
 
+import { headerDefaultStyles } from "../styles/headerDefaultStyles";
+import { HomeScreen } from "../Screens/HomeScreen";
+
 const { Navigator, Screen } = createStackNavigator();
 
 const HomeStack = () => {
   return (
-    <Navigator headerMode="none">
+    <Navigator screenOptions={headerDefaultStyles}>
       <Screen
-        name="homePage"
-        component={HomePage}
+        name="Home"
+        component={HomeScreen}
         options={() => ({
           title: "One Time Lists",
         })}

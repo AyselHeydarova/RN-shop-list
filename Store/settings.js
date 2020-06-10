@@ -12,11 +12,8 @@ export const changeUsernameAndAvatar = (payload) => ({
   const initialState = {
       userInfo: {
            username: "John Smith",
-    userAvatar: "",
+            userAvatar: "",
       }
-   
-
-
   };
   
   export function userReducer(state = initialState, {type, payload}) {
