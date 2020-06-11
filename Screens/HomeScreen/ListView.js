@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { DefText } from "../../Commons/DefText";
+import { DefText } from "../../Components/DefText";
 import { COLORS } from "../../styles/colors";
 import { LIST_TYPES } from "../../utilities/listTypes";
 

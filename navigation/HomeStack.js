@@ -1,21 +1,15 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import HomePage from "../Screens/HomePage";
-import CreateList from "../Components/CreateList";
-import { COLORS } from "../styles/colors";
-import { UserSettings } from "../Components/UserSettings";
-import { RegularLists } from "../Components/RegularLists";
-import SingleListEdit from "../Components/SingleListEdit";
-import { SingleListStatic } from "../Components/SingleListStatic";
 import { IconBtn } from "../Components/IconBtn";
-
-import SaveIcon from "../assets/Save.png";
-import EditIcon from "../assets/Pen.png";
-import Burger from "../assets/burger.png";
-
 import { headerDefaultStyles } from "../styles/headerDefaultStyles";
 import { HomeScreen } from "../Screens/HomeScreen";
+import { LIST_TYPES } from "../utilities/listTypes";
+import BurgerIcon from "../assets/burger.png";
+import SaveIcon from "../assets/Save.png";
+import PenIcon from "../assets/Pen.png";
+import BackIcon from "../assets/Back.png";
+import { ListScreen } from "../Screens";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -25,52 +19,56 @@ const HomeStack = () => {
       <Screen
         name="Home"
         component={HomeScreen}
-        options={() => ({
-          title: "One Time Lists",
+        options={({ route, navigation }) => ({
+          title: getHomepageTitle(route.params?.listType),
+          headerRight: () => (
+            <IconBtn
+              source={BurgerIcon}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
         })}
       />
 
       <Screen
-        name="singleEdit"
-        component={SingleListEdit}
-        options={({ route }) => ({
+        name="List"
+        component={ListScreen}
+        options={({ route, navigation }) => ({
           title: route.params.listName,
+          headerRight: () => (
+            <IconBtn
+              source={route.params.isEditMode ? SaveIcon : PenIcon}
+              onPress={() =>
+                navigation.setParams({
+                  isEditMode: !route.params.isEditMode,
+                })
+              }
+            />
+          ),
+
+          headerLeft: () => (
+            <IconBtn
+              source={BackIcon}
+              onPress={() => {
+                navigation.navigate("Home", {
+                  listType: route.params?.listType,
+                });
+              }}
+            />
+          ),
         })}
-      />
-
-      <Screen
-        name="singleStatic"
-        component={SingleListStatic}
-        options={({ route }) => ({
-          title: route.params.listName,
-        })}
-      />
-
-      <Screen
-        name="regular"
-        component={RegularLists}
-        options={{
-          title: "Regular Lists",
-        }}
-      />
-
-      <Screen
-        name="newList"
-        component={CreateList}
-        options={{
-          title: "New List",
-        }}
-      />
-
-      <Screen
-        name="userSettings"
-        component={UserSettings}
-        options={{
-          title: "User Settings",
-        }}
       />
     </Navigator>
   );
 };
+
+function getHomepageTitle(type) {
+  const titles = {
+    [LIST_TYPES.ONETIME]: "One time lists",
+    [LIST_TYPES.REGULAR]: "Regular lists",
+  };
+
+  return titles(type) || titles[LIST_TYPES.ONETIME];
+}
 
 export default HomeStack;

@@ -4,8 +4,9 @@ import { DrawerContentScrollView } from "@react-navigation/drawer";
 
 import DefaultAvatarImg from "../assets/profile.png";
 import { COLORS } from "../styles/colors";
-import { DefText } from "../Commons/DefText";
+import { DefText } from "../Components/DefText";
 import { connect } from "react-redux";
+import { LIST_TYPES } from "../utilities/listTypes";
 
 const mapStateToProps = (state) => ({
   userData: state.userSettings,
@@ -13,8 +14,6 @@ const mapStateToProps = (state) => ({
 
 export const CustomDrawer = connect(mapStateToProps)((props) => {
   const url = props.userData.url;
-
-  console.log("drawer url", url);
 
   return (
     <View style={styles.container}>
@@ -35,7 +34,7 @@ export const CustomDrawer = connect(mapStateToProps)((props) => {
       <DrawerContentScrollView style={styles.containerList}>
         <TouchableOpacity
           style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("newList")}
+          onPress={() => props.navigation.navigate("CreateStack")}
         >
           <DefText style={styles.drawerTitle} weight="bold">
             Add new List
@@ -44,7 +43,11 @@ export const CustomDrawer = connect(mapStateToProps)((props) => {
 
         <TouchableOpacity
           style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("homePage")}
+          onPress={() =>
+            props.navigation.navigate("Home", {
+              params: { listType: LIST_TYPES.ONETIME },
+            })
+          }
         >
           <DefText style={styles.drawerTitle} weight="bold">
             One Time LIst
@@ -53,7 +56,11 @@ export const CustomDrawer = connect(mapStateToProps)((props) => {
 
         <TouchableOpacity
           style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("regular")}
+          onPress={() =>
+            props.navigation.navigate("Home", {
+              params: { listType: LIST_TYPES.REGULAR },
+            })
+          }
         >
           <DefText style={styles.drawerTitle} weight="bold">
             Regular Lists
@@ -62,7 +69,7 @@ export const CustomDrawer = connect(mapStateToProps)((props) => {
 
         <TouchableOpacity
           style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("userSettings")}
+          onPress={() => props.navigation.navigate("SettingStack")}
         >
           <DefText style={styles.drawerTitle} weight="bold">
             User Settings

@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Dimensions,
   Image,
   Alert,
 } from "react-native";
 
-import { DefText } from "../../Commons/DefText";
-import DeleteIcon from "../assets/delete.png";
-import EditIcon from "../assets/edit.png";
+import { DefText } from "../../Components/DefText";
+import DeleteIcon from "../../assets/delete.png";
+import EditIcon from "../../assets/edit.png";
 import { COLORS } from "../../styles/colors";
 import { toggleItemBought } from "../../Store/lists";
 import { connect } from "react-redux";

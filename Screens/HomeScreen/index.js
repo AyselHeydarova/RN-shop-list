@@ -1,9 +1,8 @@
 import React from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import { connect } from "react-redux";
 
-import { ListView } from "../Components/ListView";
-import Burger from "../assets/burger.png";
+import { ListView } from "./ListView";
 import { Layout } from "../../Commons/Layout";
 import { selectListByType, deleteList } from "../../Store/lists";
 import { getListTypeFromParams } from "../../utilities/listTypes";

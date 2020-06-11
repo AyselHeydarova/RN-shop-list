@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, Alert } from "react-native";
 import { connect } from "react-redux";
 
-import { CustomBtn } from "../Commons/CustomBtn";
+import { CustomBtn } from "../Components/CustomBtn";
 import { createList } from "../Store/lists";
 import { Layout } from "../Commons/Layout";
-import { CustomInput } from "../Commons/CustomInput";
+import { CustomInput } from "../Components/CustomInput";
 import { LIST_TYPES } from "../utilities/listTypes";
-import { GLOBAL_STYLES } from "../styles";
+import { GLOBAL_STYLES } from "../styles/globalStyles";
 import { genID } from "../utilities/genID";
 
 const createFieldsInitialState = {
@@ -27,7 +27,7 @@ export const CreateList = connect(null, {
     }));
   };
 
-  const createList = async () => {
+  const createListHandler = async () => {
     if (listFields.name.trim() === "") {
       Alert.alert("Enter list name", "It is required");
       return;
@@ -60,7 +60,7 @@ export const CreateList = connect(null, {
 
       <CustomBtn
         title="Create List"
-        onPress={createList}
+        onPress={createListHandler}
         style={style.topMargin}
       />
     </Layout>

@@ -8,6 +8,6 @@ const { Navigator, Screen } = createStackNavigator();
 
 export const CreateStack = () => (
   <Navigator screenOptions={headerDefaultStyles}>
-    <Screen name="Settings" component={CreateList} />
+    <Screen name="Create" component={CreateList} />
   </Navigator>
 );

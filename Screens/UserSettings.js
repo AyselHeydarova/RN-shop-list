@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import { CustomBtn } from "../Commons/CustomBtn";
+import { CustomBtn } from "../Components/CustomBtn";
 import { Layout } from "../Commons/Layout";
-import { CustomInput } from "../Commons/CustomInput";
+import { CustomInput } from "../Components/CustomInput";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import * as FileSystem from "expo-file-system";
@@ -28,7 +28,7 @@ const getPermissions = async () => {
   }
 };
 
-export const UserSettings = connect(mapStateToProps, {
+export const UserSettings = connect(null, {
   changeUsernameAndAvatar,
 })(({ navigation, changeUsernameAndAvatar }) => {
   const [userFields, setUserFields] = useState({
