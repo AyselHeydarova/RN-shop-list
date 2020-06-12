@@ -9,7 +9,7 @@ import { DefText } from "../../Components/DefText";
 export const StaticListHeader = ({ listType, products, onReset }) => {
   const boughtCount = products.filter((product) => product.bought).length;
 
-  onResetPress = () => {
+  const onResetPress = () => {
     Alert.alert("Reset List", "Do you want to reset list?", [
       { text: "No", style: "cancel" },
       { text: "Yes, reset", onPress: onReset },

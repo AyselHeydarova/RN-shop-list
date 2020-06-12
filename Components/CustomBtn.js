@@ -3,35 +3,29 @@ import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { COLORS } from "../styles/colors";
 import { DefText } from "./DefText";
 
-export const CustomBtn = ({ title, onPress, style }) => {
+export const CustomBtn = ({ title, onPress, style, textStyle }) => {
   return (
-    <View>
-      <TouchableOpacity
-        style={{ ...styles.wrapper, ...style }}
-        onPress={onPress}
-      >
-        <DefText style={styles.text} weight="bold">
+    <TouchableOpacity onPress={onPress}>
+      <View style={{ ...styles.wrapper, ...style }}>
+        <DefText style={{ ...styles.text, ...textStyle }} weight="bold">
           {title}
         </DefText>
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: COLORS.red,
-    width: 350,
+    backgroundColor: COLORS.BG_PRIMARY,
     height: 42,
-    borderRadius: 30,
-    marginTop: 10,
+    borderRadius: 25,
   },
 
   text: {
-    color: "white",
+    color: COLORS.HEADER_COLOR,
     fontSize: 14,
     textTransform: "uppercase",
   },

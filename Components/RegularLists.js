@@ -25,8 +25,8 @@
 //         {RegularLists.map((list) => (
 //           <ListView
 //             listId={list.id}
-          
-//             listName={list.name}
+
+//             listName={}
 //             key={list.id}
 //             listItemsLength={list.listItems.length}
 //             boughtCount={

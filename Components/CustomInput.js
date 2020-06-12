@@ -1,7 +1,9 @@
 import React from "react";
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, View } from "react-native";
 import { COLORS } from "../styles/colors";
 import { DefText } from "./DefText";
+
+import { FONT_FAMILIES } from "../styles/fonts";
 
 export const CustomInput = ({ style, label, ...rest }) => {
   return (
@@ -22,6 +24,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textAlign: "center",
     borderRadius: 25,
+    fontFamily: FONT_FAMILIES.bold,
   },
   label: {
     textAlign: "center",

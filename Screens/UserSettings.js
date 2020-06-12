@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import { CustomBtn } from "../Components/CustomBtn";
-import { Layout } from "../Commons/Layout";
+import { Container } from "../Commons/Container";
 import { CustomInput } from "../Components/CustomInput";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
@@ -88,7 +88,7 @@ export const UserSettings = connect(null, {
   };
 
   return (
-    <Layout title={"User Settings"} backBtn={false}>
+    <Container>
       <CustomInput
         placeholder="Enter your Name"
         label="user name"
@@ -112,6 +112,6 @@ export const UserSettings = connect(null, {
       />
       <CustomBtn title="Take Picture" onPress={takePicture} />
       <CustomBtn title="Save Changes" onPress={saveChangesHandler} />
-    </Layout>
+      </Container>
   );
 });

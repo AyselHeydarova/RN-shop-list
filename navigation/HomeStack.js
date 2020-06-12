@@ -14,13 +14,21 @@ import { ListScreen } from "../Screens";
 const { Navigator, Screen } = createStackNavigator();
 
 const HomeStack = () => {
+  function getHomepageTitle(type) {
+    const titles = {
+      [LIST_TYPES.ONETIME]: "One time lists",
+      [LIST_TYPES.REGULAR]: "Regular lists",
+    };
+
+    return titles(type) || titles[LIST_TYPES.ONETIME];
+  }
   return (
     <Navigator screenOptions={headerDefaultStyles}>
       <Screen
         name="Home"
         component={HomeScreen}
         options={({ route, navigation }) => ({
-          title: getHomepageTitle(route.params?.listType),
+          title: route?.params?.listType,
           headerRight: () => (
             <IconBtn
               source={BurgerIcon}
@@ -61,14 +69,5 @@ const HomeStack = () => {
     </Navigator>
   );
 };
-
-function getHomepageTitle(type) {
-  const titles = {
-    [LIST_TYPES.ONETIME]: "One time lists",
-    [LIST_TYPES.REGULAR]: "Regular lists",
-  };
-
-  return titles(type) || titles[LIST_TYPES.ONETIME];
-}
 
 export default HomeStack;

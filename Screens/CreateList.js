@@ -4,11 +4,12 @@ import { connect } from "react-redux";
 
 import { CustomBtn } from "../Components/CustomBtn";
 import { createList } from "../Store/lists";
-import { Layout } from "../Commons/Layout";
+import { Container } from "../Commons/Container";
 import { CustomInput } from "../Components/CustomInput";
 import { LIST_TYPES } from "../utilities/listTypes";
 import { GLOBAL_STYLES } from "../styles/globalStyles";
 import { genID } from "../utilities/genID";
+import { RadioGroup } from "../Components/RadioGroup";
 
 const createFieldsInitialState = {
   name: "",
@@ -43,7 +44,7 @@ export const CreateList = connect(null, {
     setListFields(createFieldsInitialState);
   };
   return (
-    <Layout title={"New List"} backBtn={false}>
+    <Container>
       <CustomInput
         placeholder="Something for me"
         value={listFields.name}
@@ -61,9 +62,9 @@ export const CreateList = connect(null, {
       <CustomBtn
         title="Create List"
         onPress={createListHandler}
-        style={style.topMargin}
+        style={styles.topMargin}
       />
-    </Layout>
+    </Container>
   );
 });
 const styles = StyleSheet.create({

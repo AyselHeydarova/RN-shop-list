@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, Alert } from "react-native";
 import { connect } from "react-redux";
 
 import { ListView } from "./ListView";
-import { Layout } from "../../Commons/Layout";
+import { Container } from "../../Commons/Container";
 import { selectListByType, deleteList } from "../../Store/lists";
 import { getListTypeFromParams } from "../../utilities/listTypes";
 import { GLOBAL_STYLES } from "../../styles/globalStyles";
@@ -15,7 +15,7 @@ const mapStateToProps = (state, { route }) => ({
 export const HomeScreen = connect(mapStateToProps, { deleteList })(
   ({ route, navigation, coversList, deleteList }) => {
     const listType = getListTypeFromParams(route);
-
+   
     const handleDelete = (listName, listId) => {
       Alert.alert(
         "Confirm Delete",
@@ -35,42 +35,33 @@ export const HomeScreen = connect(mapStateToProps, { deleteList })(
     };
 
     return (
-      <Layout
-        title={"One Time Lists"}
-        backBtn={false}
-        source={Burger}
-        onPress={() => navigation.openDrawer()}
-      >
+      <Container>
         <FlatList
-          contentContainerStyle={styles.container}
           data={coversList}
-          renderItem={({ list }) => (
-            <ListView
-              listName={list.name}
-              listItemsLength={list.listItems.length}
-              boughtCount={
-                list.listItems.filter((item) => item.bought === true).length
-              }
-              onPress={() =>
-                navigation.navigate("listScreen", {
-                  listId: list.id,
-                  isEditMode: false,
-                  listType,
-                  listName: list.title,
-                })
-              }
-              listType={listType}
-              onLongPress={() => handleDelete(list.title, list.id)}
-            />
-          )}
+          renderItem={({ item }) => {
+            return (
+              <ListView
+                listName={item.name}
+                listItemsLength={item.listItems.length}
+                boughtCount={
+                  item.listItems.filter((item) => item.bought === true).length
+                }
+                onPress={() =>
+                  navigation.navigate("List", {
+                    listId: item.id,
+                    isEditMode: false,
+                    listType,
+                    listName: item.name,
+                  })
+                }
+                listType={listType}
+                onLongPress={() => handleDelete(item.name, item.id)}
+              />
+            );
+          }}
+          keyExtractor={(item) => item.id}
         />
-      </Layout>
+      </Container>
     );
   }
 );
-
-const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: GLOBAL_STYLES.PADDING,
-  },
-});

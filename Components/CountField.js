@@ -1,6 +1,8 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { CustomInput } from "./CustomInput";
+import { DefText } from "./DefText";
+
 
 export const CountField = ({onChangeText, value, ...rest}) => {
   const onChangeHandler = (value) => {
@@ -36,7 +38,7 @@ export const CountField = ({onChangeText, value, ...rest}) => {
   );
 };
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   btn: {
     position: "absolute",
     height: 42,

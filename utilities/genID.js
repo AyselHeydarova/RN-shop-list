@@ -1,3 +1,3 @@
 export function genID() {
-    return `${Math.random()}${Data.now()}`;
+  return `${Math.random()}${Date.now()}`;
 }

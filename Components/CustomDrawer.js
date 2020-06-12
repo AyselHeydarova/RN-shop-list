@@ -7,78 +7,75 @@ import { COLORS } from "../styles/colors";
 import { DefText } from "../Components/DefText";
 import { connect } from "react-redux";
 import { LIST_TYPES } from "../utilities/listTypes";
+import { selectUserInfo } from "../Store/settings";
+import { CustomBtn } from "./CustomBtn";
+import { GLOBAL_STYLES } from "../styles/globalStyles";
 
 const mapStateToProps = (state) => ({
-  userData: state.userSettings,
+  userData: selectUserInfo(state),
 });
 
-export const CustomDrawer = connect(mapStateToProps)((props) => {
-  const url = props.userData.url;
+export const CustomDrawer = connect(mapStateToProps)(
+  ({ navigation, userData }) => {
+    const url = userData.userAvatar;
 
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.closeIcon}>
-        <Image style={styles.closeIconImg} />
-      </TouchableOpacity>
-      <View style={styles.userInfo}>
-        <View style={styles.imageWrapper}>
-          <Image
-            source={url === "" ? DefaultAvatarImg : { uri: url }}
-            style={styles.userImg}
-          />
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity style={styles.closeIcon}>
+          <Image style={styles.closeIconImg} />
+        </TouchableOpacity>
+        <View style={styles.userInfo}>
+          <View style={styles.imageWrapper}>
+            <Image
+              source={url === "" ? DefaultAvatarImg : { uri: url }}
+              style={styles.userImg}
+            />
+          </View>
+
+          <DefText style={styles.username}>{userData.username}</DefText>
         </View>
 
-        <DefText style={styles.username}>{props.userData.username}</DefText>
+        <DrawerContentScrollView style={styles.containerList}>
+          <CustomBtn
+            style={styles.drawerLink}
+            textStyle ={styles.drawerTitle}
+            title="Add new list"
+            onPress={() => navigation.navigate("CreateStack")}
+          />
+
+          <CustomBtn
+            style={styles.drawerLink}
+            textStyle ={styles.drawerTitle}
+            title="One Time list"
+            onPress={() =>
+              navigation.navigate("Home", {
+                params: { listType: LIST_TYPES.ONETIME },
+              })
+            }
+          />
+
+          <CustomBtn
+            style={styles.drawerLink}
+            textStyle ={styles.drawerTitle}
+            title="Regular list"
+            onPress={() =>
+              navigation.navigate("Home", {
+                params: { listType: LIST_TYPES.REGULAR },
+              })
+            }
+          />
+
+          <CustomBtn
+            style={styles.drawerLink}
+            textStyle ={styles.drawerTitle}
+            title="User Settings"
+            onPress={() => navigation.navigate("SettingStack")}
+          />
+        </DrawerContentScrollView>
       </View>
-
-      <DrawerContentScrollView style={styles.containerList}>
-        <TouchableOpacity
-          style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("CreateStack")}
-        >
-          <DefText style={styles.drawerTitle} weight="bold">
-            Add new List
-          </DefText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.drawerLink}
-          onPress={() =>
-            props.navigation.navigate("Home", {
-              params: { listType: LIST_TYPES.ONETIME },
-            })
-          }
-        >
-          <DefText style={styles.drawerTitle} weight="bold">
-            One Time LIst
-          </DefText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.drawerLink}
-          onPress={() =>
-            props.navigation.navigate("Home", {
-              params: { listType: LIST_TYPES.REGULAR },
-            })
-          }
-        >
-          <DefText style={styles.drawerTitle} weight="bold">
-            Regular Lists
-          </DefText>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.drawerLink}
-          onPress={() => props.navigation.navigate("SettingStack")}
-        >
-          <DefText style={styles.drawerTitle} weight="bold">
-            User Settings
-          </DefText>
-        </TouchableOpacity>
-      </DrawerContentScrollView>
-    </View>
-  );
-});
+    );
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -86,13 +83,13 @@ const styles = StyleSheet.create({
   },
 
   containerList: {
-    backgroundColor: COLORS.red,
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    backgroundColor: COLORS.BG_PRIMARY,
+    padding: GLOBAL_STYLES.PADDING,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 
   userInfo: {
-    display: "flex",
     flexDirection: "row",
     paddingTop: 40,
     paddingBottom: 13,
@@ -110,7 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     borderWidth: 3,
     margin: 15,
-    borderColor: COLORS.red,
+    borderColor: COLORS.BG_PRIMARY,
   },
 
   username: {
@@ -118,20 +115,11 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   drawerLink: {
-    display: "flex",
-    alignItems: "center",
-    width: 250,
-    paddingVertical: 12,
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 40,
+    height: 34,
+    marginBottom: 10,
     backgroundColor: "white",
-    textAlign: "center",
-    overflow: "hidden",
   },
   drawerTitle: {
-    fontSize: 14,
-    color: COLORS.red,
-    textTransform: "uppercase",
+    color: COLORS.BG_PRIMARY,
   },
 });
