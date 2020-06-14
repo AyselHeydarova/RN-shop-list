@@ -8,6 +8,7 @@ export const selectListByType = (state, type) => state[MODULE_NAME][type];
 export const selectSingleListByID = (state, type, ID) =>
   selectListByType(state, type).find((list) => list.id === ID);
 // Actions
+export const SET_LISTS_DATA = "SET_LISTS_DATA";
 export const CREATE_LIST = "CREATE_LIST";
 export const DELETE_LIST = "DELETE_LIST";
 export const ADD_LIST_ITEM = "ADD_LIST_ITEM";
@@ -17,6 +18,10 @@ export const TOGGLE_ITEM_BOUGHT = "TOGGLE_ITEM_BOUGHT";
 export const RESET_BOUGHT = "RESET_BOUGHT";
 
 // Action Creators
+export const setListsData = (payload) => ({
+  type: SET_LISTS_DATA,
+  payload,
+});
 
 export const createList = (payload) => ({
   type: CREATE_LIST,
@@ -67,6 +72,11 @@ export function listReducer(state = initialState, { type, payload }) {
         ...state,
         ...payload.lists,
       };
+    case SET_LISTS_DATA:
+      return {
+        ...state,
+        ...payload,
+      };
     case CREATE_LIST: {
       return {
         ...state,
@@ -102,13 +112,13 @@ export function listReducer(state = initialState, { type, payload }) {
           ...updatedState[payload.listType][listIndex],
 
           listItems: [
-            ...updatedState[payload.listType][listIndex].listItems,
             {
               id: genID(),
-              name: payload.name,
-              count: payload.count,
-              unit: payload.unit,
+              name: payload.product?.name,
+              count: payload.product?.count,
+              unit: payload.product?.unit,
             },
+            ...updatedState[payload.listType][listIndex].listItems,
           ],
         };
       }
@@ -145,12 +155,10 @@ export function listReducer(state = initialState, { type, payload }) {
             return {
               ...list,
               listItems: list.listItems.map((listItem) => {
-                if (listItem.id === payload.listItemId) {
+                if (listItem.id === payload.product.id) {
                   return {
                     ...listItem,
-                    name: payload.name,
-                    count: payload.count,
-                    unit: payload.unit,
+                    ...payload.product,
                   };
                 }
                 return listItem;

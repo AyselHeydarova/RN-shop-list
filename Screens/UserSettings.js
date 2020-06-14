@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
+import { Image, StyleSheet, View } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import * as FileSystem from "expo-file-system";
 
 import { CustomBtn } from "../Components/CustomBtn";
 import { Container } from "../Commons/Container";
 import { CustomInput } from "../Components/CustomInput";
-import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";
-import * as FileSystem from "expo-file-system";
-import { Image } from "react-native";
 import { COLORS } from "../styles/colors";
 import { changeUsernameAndAvatar } from "../Store/settings";
+import { AuthForm } from "../Components/AuthForm";
+
+import { getEqualWidth } from "../utilities/getEqualWidth";
 
 const getPermissions = async () => {
   try {
@@ -32,7 +35,7 @@ export const UserSettings = connect(null, {
   changeUsernameAndAvatar,
 })(({ navigation, changeUsernameAndAvatar }) => {
   const [userFields, setUserFields] = useState({
-    username: "username",
+    username: "",
     userAvatar: "",
   });
 
@@ -67,7 +70,6 @@ export const UserSettings = connect(null, {
     });
 
     image.uri = newPath;
-
     setUserFields((fields) => ({
       ...fields,
       userAvatar: image.uri,
@@ -95,23 +97,63 @@ export const UserSettings = connect(null, {
         value={userFields.username}
         onChangeText={(v) => handleFieldChange("username", v)}
       />
-      <Image
-        source={{ uri: userAvatar }}
-        style={{
-          width: 100,
-          height: 100,
-          marginTop: 10,
-          borderWidth: 2,
-          borderColor: COLORS.red,
-          borderRadius: 50,
-        }}
-      />
+      <View style={styles.imgWraper}>
+        <Image
+          source={{ uri: userAvatar }}
+          style={styles.img}
+          resizeMode="contain"
+        />
+      </View>
+
+      <View style={styles.row}>
+        <CustomBtn
+          title="from Gallery"
+          onPress={takeImageFromGallery}
+          style={styles.btn}
+          width={getEqualWidth(2)}
+        />
+        <CustomBtn
+          title="Take Picture"
+          onPress={takePicture}
+          style={styles.btn}
+          width={getEqualWidth(2)}
+        />
+      </View>
+
       <CustomBtn
-        title="Take image from Gallery"
-        onPress={takeImageFromGallery}
+        title="Save Changes"
+        onPress={saveChangesHandler}
+        style={styles.btn}
       />
-      <CustomBtn title="Take Picture" onPress={takePicture} />
-      <CustomBtn title="Save Changes" onPress={saveChangesHandler} />
-      </Container>
+
+      <AuthForm />
+    </Container>
   );
+});
+
+const styles = StyleSheet.create({
+  btn: {
+    marginBottom: 10,
+  },
+
+  img: {
+    width: "100%",
+    height: "100%",
+  },
+
+  imgWraper: {
+    alignSelf: "center",
+    width: 80,
+    height: 80,
+    marginVertical: 10,
+    borderWidth: 2,
+    borderColor: COLORS.BG_PRIMARY,
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
 });

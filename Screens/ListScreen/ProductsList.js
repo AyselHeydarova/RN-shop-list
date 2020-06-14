@@ -1,7 +1,6 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList } from "react-native";
 import { ListItem } from "./ListItem";
-import { GLOBAL_STYLES } from "../../styles/globalStyles";
 
 export const ProductsList = ({
   products,
@@ -13,10 +12,7 @@ export const ProductsList = ({
 }) => {
   return (
     <FlatList
-      contentContainerStyle={[
-        styles.list,
-        { paddingTop: isEditMode ? 33 : 15 },
-      ]}
+      contentContainerStyle={[{ paddingTop: isEditMode ? 33 : 15 }]}
       data={products}
       renderItem={({ item }) => (
         <ListItem
@@ -31,9 +27,3 @@ export const ProductsList = ({
     />
   );
 };
-
-const styles = StyleSheet.create({
-  list: {
-    paddingHorizontal: GLOBAL_STYLES.PADDING,
-  },
-});

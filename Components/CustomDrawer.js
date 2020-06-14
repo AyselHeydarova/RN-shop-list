@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
-import { DrawerContentScrollView } from "@react-navigation/drawer";
 
-import DefaultAvatarImg from "../assets/profile.png";
+import DefaultAvatarImg from "../assets/avatar.jpg";
 import { COLORS } from "../styles/colors";
 import { DefText } from "../Components/DefText";
 import { connect } from "react-redux";
@@ -17,7 +16,7 @@ const mapStateToProps = (state) => ({
 
 export const CustomDrawer = connect(mapStateToProps)(
   ({ navigation, userData }) => {
-    const url = userData.userAvatar;
+    const url = userData.userInfo.userAvatar;
 
     return (
       <View style={styles.container}>
@@ -25,53 +24,49 @@ export const CustomDrawer = connect(mapStateToProps)(
           <Image style={styles.closeIconImg} />
         </TouchableOpacity>
         <View style={styles.userInfo}>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={url === "" ? DefaultAvatarImg : { uri: url }}
-              style={styles.userImg}
-            />
-          </View>
+          <Image
+            source={url === "" ? DefaultAvatarImg : { uri: url }}
+            style={styles.userImg}
+          />
 
-          <DefText style={styles.username}>{userData.username}</DefText>
+          <DefText style={styles.username}>
+            {userData.userInfo.username}
+          </DefText>
         </View>
 
-        <DrawerContentScrollView style={styles.containerList}>
+        <View style={styles.containerList}>
           <CustomBtn
-            style={styles.drawerLink}
-            textStyle ={styles.drawerTitle}
+            style={{ ...styles.drawerLink, ...styles.spacing }}
+            textStyle={styles.drawerTitle}
             title="Add new list"
             onPress={() => navigation.navigate("CreateStack")}
           />
 
           <CustomBtn
             style={styles.drawerLink}
-            textStyle ={styles.drawerTitle}
+            textStyle={styles.drawerTitle}
             title="One Time list"
             onPress={() =>
-              navigation.navigate("Home", {
-                params: { listType: LIST_TYPES.ONETIME },
-              })
+              navigation.navigate("Home", { listType: LIST_TYPES.ONETIME })
             }
           />
 
           <CustomBtn
             style={styles.drawerLink}
-            textStyle ={styles.drawerTitle}
+            textStyle={styles.drawerTitle}
             title="Regular list"
-            onPress={() =>
-              navigation.navigate("Home", {
-                params: { listType: LIST_TYPES.REGULAR },
-              })
-            }
+            onPress={() => {
+              navigation.navigate("Home", { listType: LIST_TYPES.REGULAR });
+            }}
           />
 
           <CustomBtn
             style={styles.drawerLink}
-            textStyle ={styles.drawerTitle}
+            textStyle={styles.drawerTitle}
             title="User Settings"
             onPress={() => navigation.navigate("SettingStack")}
           />
-        </DrawerContentScrollView>
+        </View>
       </View>
     );
   }
@@ -83,6 +78,7 @@ const styles = StyleSheet.create({
   },
 
   containerList: {
+    flex: 1,
     backgroundColor: COLORS.BG_PRIMARY,
     padding: GLOBAL_STYLES.PADDING,
     borderTopLeftRadius: 20,
@@ -91,28 +87,24 @@ const styles = StyleSheet.create({
 
   userInfo: {
     flexDirection: "row",
-    paddingTop: 40,
-    paddingBottom: 13,
+    paddingTop: 35,
+    paddingBottom: 10,
+    paddingHorizontal: GLOBAL_STYLES.PADDING,
     alignItems: "center",
-    width: 200,
   },
   userImg: {
-    width: "100%",
-    height: "100%",
-    borderRadius: 35,
-  },
-  imageWrapper: {
-    width: 73,
-    height: 73,
-    borderRadius: 35,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     borderWidth: 3,
-    margin: 15,
     borderColor: COLORS.BG_PRIMARY,
   },
 
   username: {
-    fontSize: 20,
-    marginTop: 6,
+    fontSize: 22,
+    marginLeft: 22,
+    color: COLORS.TEXT,
+    opacity: 0.65,
   },
   drawerLink: {
     height: 34,
@@ -121,5 +113,9 @@ const styles = StyleSheet.create({
   },
   drawerTitle: {
     color: COLORS.BG_PRIMARY,
+  },
+
+  spacing: {
+    marginBottom: 32,
   },
 });

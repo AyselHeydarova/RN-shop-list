@@ -22,7 +22,7 @@ export function userReducer(state = initialState, { type, payload }) {
         ...state,
         userInfo: {
           username: payload.username,
-          userAvatar: payload.url,
+          userAvatar: payload.userAvatar,
         },
       };
     }

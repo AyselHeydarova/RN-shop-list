@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { ListForm } from "./ListForm";
 import { StaticListHeader } from "./StaticListHeader";
 import { ProductsList } from "./ProductsList";
+import { Container } from "../../Commons/Container";
 import { connect } from "react-redux";
 import {
   toggleItemBought,
@@ -68,12 +69,12 @@ export const ListScreen = connect(mapStateToProps, {
       onProductUpdateCancel();
     };
 
-    const onProductLongPressHandler = (productID) => {
-      toggleItemBought(fillPayload({ productID }));
+    const onProductLongPressHandler = (listItemId) => {
+      toggleItemBought(fillPayload({ listItemId }));
     };
 
-    const deleteProductHandler = (productID) => {
-      deleteListItem(fillPayload({ productID }));
+    const deleteProductHandler = (listItemId) => {
+      deleteListItem(fillPayload({ listItemId }));
     };
 
     const addProductHandler = (product) => {
@@ -85,34 +86,36 @@ export const ListScreen = connect(mapStateToProps, {
     };
 
     return (
-      <View>
-        {isEditMode && (
-          <ListForm
-            singleProductEditState={singleProductEditState}
-            onProductUpdateCancel={onProductUpdateCancel}
-            onProductUpdateSubmit={onProductUpdateSubmit}
-            onCreateSubmit={addProductHandler}
-          />
-        )}
+      <Container>
+        <View>
+          {isEditMode && (
+            <ListForm
+              singleProductEditState={singleProductEditState}
+              onProductUpdateCancel={onProductUpdateCancel}
+              onProductUpdateSubmit={onProductUpdateSubmit}
+              onCreateSubmit={addProductHandler}
+            />
+          )}
 
-        {!isEditMode && (
-          <StaticListHeader
-            onReset={resetListHandler}
+          {!isEditMode && (
+            <StaticListHeader
+              onReset={resetListHandler}
+              products={list.listItems}
+              listType={listType}
+            />
+          )}
+
+          <ProductsList
+            editProductId={singleProductEditState.product?.id}
             products={list.listItems}
-            listType={listType}
+            isEditMode={isEditMode}
+            editProductHandler={editProductHandler}
+            onProductLongPress={onProductLongPressHandler}
+            deleteProductHandler={deleteProductHandler}
+            editProductHandler={editProductHandler}
           />
-        )}
-
-        <ProductsList
-          editProductId={singleProductEditState.product?.id}
-          products={list.listItems}
-          isEditMode={isEditMode}
-          editProductHandler={editProductHandler}
-          onProductLongPress={onProductLongPressHandler}
-          deleteProductHandler={deleteProductHandler}
-          editProductHandler={editProductHandler}
-        />
-      </View>
+        </View>
+      </Container>
     );
   }
 );

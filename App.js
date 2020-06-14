@@ -6,6 +6,8 @@ import { loadFonts } from "./styles/fonts";
 import { Drawer } from "./navigation/Drawer";
 import store from "./Store/store";
 
+
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   if (!loaded) {

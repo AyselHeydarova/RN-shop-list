@@ -14,24 +14,17 @@ import { ListScreen } from "../Screens";
 const { Navigator, Screen } = createStackNavigator();
 
 const HomeStack = () => {
-  function getHomepageTitle(type) {
-    const titles = {
-      [LIST_TYPES.ONETIME]: "One time lists",
-      [LIST_TYPES.REGULAR]: "Regular lists",
-    };
-
-    return titles(type) || titles[LIST_TYPES.ONETIME];
-  }
   return (
     <Navigator screenOptions={headerDefaultStyles}>
       <Screen
         name="Home"
         component={HomeScreen}
         options={({ route, navigation }) => ({
-          title: route?.params?.listType,
+          title: getHomepageTitle(route?.params?.listType),
           headerRight: () => (
             <IconBtn
               source={BurgerIcon}
+              side="right"
               onPress={() => navigation.openDrawer()}
             />
           ),
@@ -46,6 +39,7 @@ const HomeStack = () => {
           headerRight: () => (
             <IconBtn
               source={route.params.isEditMode ? SaveIcon : PenIcon}
+              side="right"
               onPress={() =>
                 navigation.setParams({
                   isEditMode: !route.params.isEditMode,
@@ -57,6 +51,7 @@ const HomeStack = () => {
           headerLeft: () => (
             <IconBtn
               source={BackIcon}
+              side="left"
               onPress={() => {
                 navigation.navigate("Home", {
                   listType: route.params?.listType,
@@ -71,3 +66,12 @@ const HomeStack = () => {
 };
 
 export default HomeStack;
+
+function getHomepageTitle(type) {
+  const titles = {
+    [LIST_TYPES.ONETIME]: "One time lists",
+    [LIST_TYPES.REGULAR]: "Regular lists",
+  };
+
+  return titles[type] || titles[LIST_TYPES.ONETIME];
+}

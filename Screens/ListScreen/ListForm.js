@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View, Alert, Keyboard } from "react-native";
 
 import { CountField } from "../../Components/CountField";
 import { RadioGroup } from "../../Components/RadioGroup";
@@ -50,23 +50,9 @@ export const ListForm = ({
     return true;
   };
 
-  const handleEdit = (idvalue) => {
-    const indexOfListItem = allListItems.findIndex(
-      (listItem) => listItem.id === idvalue
-    );
-    setItemEditMode(true);
-    setFields((fields) => ({
-      ...fields,
-      ...allListItems[indexOfListItem],
-      listItemId: idvalue,
-    }));
-
-    setClickedListItem(idvalue);
-  };
-
   const updateItem = () => {
     if (validateForm()) {
-      onProductUpdateSubmit(fiedls);
+      onProductUpdateSubmit(fields);
       resetForm();
     }
   };
@@ -80,6 +66,7 @@ export const ListForm = ({
     if (validateForm()) {
       onCreateSubmit(fields);
       resetForm();
+      Keyboard.dismiss();
     }
   };
 
@@ -131,7 +118,6 @@ export const ListForm = ({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
     paddingBottom: 21,
     borderBottomColor: COLORS.BG_SECONDARY,
     borderBottomWidth: 2,

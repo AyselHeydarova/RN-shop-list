@@ -10,7 +10,7 @@ import { updateAS, getDataFromAS } from "../utilities/dataStorage";
 const allReducers = combineReducers({
   [listsModuleName]: listReducer,
   [settingsModuleName]: userReducer,
-  // [authModuleName]: authReducer,
+  [authModuleName]: authReducer,
 });
 const store = createStore(
   allReducers,

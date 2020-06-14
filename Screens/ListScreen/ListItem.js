@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image, Alert } from "react-native";
 
 import { DefText } from "../../Components/DefText";
 import DeleteIcon from "../../assets/delete.png";
-import EditIcon from "../../assets/edit.png";
+import EditIcon from "../../assets/Pen.png";
 import { COLORS } from "../../styles/colors";
-import { toggleItemBought } from "../../Store/lists";
-import { connect } from "react-redux";
 
 export const ListItem = ({
   product,
@@ -22,7 +14,7 @@ export const ListItem = ({
   onDeletePress,
   onEditPress,
 }) => {
-  const { name, count, unit, Bought } = product;
+  const { name, count, unit, bought } = product;
 
   const onDeleteHandler = () => {
     Alert.alert("Delete this product?", "Are you sure?", [
@@ -41,7 +33,7 @@ export const ListItem = ({
         style={[
           styles.wrapper,
           {
-            opacity: !isEditMode && Bought ? 0.5 : 1,
+            opacity: !isEditMode && bought ? 0.5 : 1,
             paddingHorizontal: isEditMode ? 55 : 20,
           },
         ]}

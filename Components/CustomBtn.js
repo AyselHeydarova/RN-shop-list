@@ -3,9 +3,9 @@ import { TouchableOpacity, StyleSheet, View } from "react-native";
 import { COLORS } from "../styles/colors";
 import { DefText } from "./DefText";
 
-export const CustomBtn = ({ title, onPress, style, textStyle }) => {
+export const CustomBtn = ({ title, onPress, style, textStyle, width }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} style={{ width }}>
       <View style={{ ...styles.wrapper, ...style }}>
         <DefText style={{ ...styles.text, ...textStyle }} weight="bold">
           {title}

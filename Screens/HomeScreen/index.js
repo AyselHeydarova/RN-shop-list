@@ -1,12 +1,11 @@
 import React from "react";
-import { StyleSheet, FlatList, Alert } from "react-native";
+import { FlatList, Alert } from "react-native";
 import { connect } from "react-redux";
 
 import { ListView } from "./ListView";
 import { Container } from "../../Commons/Container";
 import { selectListByType, deleteList } from "../../Store/lists";
 import { getListTypeFromParams } from "../../utilities/listTypes";
-import { GLOBAL_STYLES } from "../../styles/globalStyles";
 
 const mapStateToProps = (state, { route }) => ({
   coversList: selectListByType(state, getListTypeFromParams(route)),
